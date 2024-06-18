@@ -72,7 +72,7 @@ const MainPage = ({ onSearch }) => {
                             {/* <p className="text-gray-600"> {card.content} </p> */}
                             {/* <p className="text-gray-600 text-sm mt-2"> {card.nickname} </p>
                             <p className='text-gray-600 text-sm mt-2'> {new Date(card.created_at).toLocaleDateString()} </p> */}
-                            <p className="text-gray-600 mb-1 text-sm justify-between"> {card.nickname} {new Date(card.created_at).toLocaleDateString()} </p>
+                            <p className="text-gray-600 mb-1 text-sm justify-between="> {card.nickname} {new Date(card.created_at).toLocaleDateString()} </p>
                         </div>
 
                     </div>
