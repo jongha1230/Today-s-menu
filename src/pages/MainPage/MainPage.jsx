@@ -26,27 +26,23 @@ const MainPage = () => {
             <div alt="설문조사" className="bg-gray-200 w-300 h-32 flex items-center justify-center mt-5"> 설문조사</div>
 
             <div className="flex flex-wrap justify-center space-x-4 mt-5">
-                {cards.map((card) => (
+                {cards.slice(0, 4).map((card) => (
                     <div key={card.id} className="bg-white w-52 h-48 rounded-lg p-4 border-2">
-                        <image> 이미지 </image>
+                        <img src={card.image_url} alt={card.title} />
                         <div className='p-4'>
                             <hr className="border-gray-300 mb-2" />
                             <h3 className="text-lg font-bold mb-2"> {card.title} </h3>
                             <p className="text-gray-600"> {card.nickname} </p>
-                            <p className='text-gray-600'> {new Date(card.created_at).toLocaleDateString()} </p>
+
                         </div>
+                        <p className='text-gray-600 text-sm mt-2'> {new Date(card.created_at).toLocaleDateString()} </p>
                     </div>
                 ))}
-                {/* {/* <div className="bg-white w-52 h-48 rounded-lg p-4 border-2">
-                    <h3 className="text-lg font-bold mb-2"> 음식 1 </h3>
-                    <p className="text-gray-600"> 사용자1 </p>
-                </div> */}
-
-                <div>
-                    <a href='#' className='py-4 px-4 rounded-full bg-sub-color'> 레시피 작성 </a>
-                </div>
             </div>
 
+            <div className="flex justify-center mt-5">
+                <a href='#' className='py-4 px-4 rounded-full bg-sub-color text-center'>레시피 작성</a>
+            </div>
         </div >
     )
 }

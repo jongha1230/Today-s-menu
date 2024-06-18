@@ -2,7 +2,7 @@ import React from 'react'
 
 export const Header = () => {
     return (
-        <div className='bg-blue-50'>
+        <div className='bg-theme-color'>
             <header className='flex items-center justify-between p-5'>
                 <h1 className='text-xl font-medium' > 오늘 뭐먹지? </h1>
                 <div className='flex items-center space-x-4'>
