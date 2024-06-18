@@ -4,7 +4,7 @@ import RecipeDetail from '../pages/RecipeDetail';
 import MainLayout from '../styles/MainLayout/MainLayout';
 import LogInForm from '../components/auth/LogInForm';
 import SignUpForm from '../components/auth/SignUpForm';
-import AuthPage from '../components/pages/authPage';
+import AuthPage from '../pages/AuthPage';
 
 const router = createBrowserRouter([
   {
