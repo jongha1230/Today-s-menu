@@ -1,11 +1,23 @@
 import { createBrowserRouter } from 'react-router-dom';
+
+import MainPage from '../pages/MainPage';
 import RecipeDetail from '../pages/RecipeDetail';
+import { MainLayout } from '../styles/MainLayout/MainLayout';
 
 const router = createBrowserRouter([
   {
-    // path: '/recipe-detail',
     path: '/',
-    element: <RecipeDetail />
+    element: <MainLayout />,
+    children: [
+      {
+        path: '/',
+        element: <MainPage />
+      },
+      {
+        path: '/recipe',
+        element: <RecipeDetail />
+      }
+    ]
   }
 ]);
 
