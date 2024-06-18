@@ -2,7 +2,7 @@ import FoodItem from './FoodItem';
 
 const FoodList = ({ foods }) => {
   return (
-    <ul className="list-none">
+    <ul className="list-none flex flex-col justify-center items-center w-3/4 h-5/6 gap-5">
       {foods.length ? (
         foods.map((food, index) => <FoodItem key={index} food={food} />)
       ) : (
