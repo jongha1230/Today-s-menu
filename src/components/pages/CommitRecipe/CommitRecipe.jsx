@@ -4,18 +4,60 @@ import 'tailwindcss/tailwind.css';
 const RecipeForm = () => {
   const [imageSrc, setImageSrc] = useState('https://via.placeholder.com/200');
   const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
+  const [submittedRecipes, setSubmittedRecipes] = useState([]);
+  const [editingIndex, setEditingIndex] = useState(null);
+
+  // const fatchData = async () => {
+  //   const { data, error } = await supabase.from('recipes').select('*');
+
+  //   console.log(data);
+  // };
+
+  // fatchData();
 
   const handleImageUpload = (event) => {
-    const file = event.target.files[0]; // 사용자가 선택한 첫 번째 파일
+    const file = event.target.files[0];
     if (file) {
-      // 파일이 존재하면 실행됨 (파일을 선택하지 않은 경우 실행 x)
-      const reader = new FileReader(); //파일을 비동기적으로 읽기 위함
+      const reader = new FileReader();
       reader.onload = (e) => {
-        // 파일이 존재할 때 실행되는 콜백 함수
-        setImageSrc(e.target.result); // e.target.result = 파일의 내용
+        setImageSrc(e.target.result);
       };
-      reader.readAsDataURL(file); // 파일을 데이터 URL로 읽고, 데이터 URL은 base64로 인코딩된 파일 내용을 포함하는 문자열. 이 문자열은 이미지 미리보기를 제공하는 데 사용
+      reader.readAsDataURL(file);
     }
+  };
+
+  const handleSubmit = () => {
+    const newRecipe = {
+      title,
+      content,
+      imageSrc
+    };
+
+    if (editingIndex !== null) {
+      const updatedRecipes = submittedRecipes.map((recipe, index) => (index === editingIndex ? newRecipe : recipe));
+      setSubmittedRecipes(updatedRecipes);
+      setEditingIndex(null);
+    } else {
+      setSubmittedRecipes([...submittedRecipes, newRecipe]);
+    }
+
+    setTitle('');
+    setContent('');
+    setImageSrc('https://via.placeholder.com/200');
+  };
+
+  const handleEdit = (index) => {
+    const recipe = submittedRecipes[index];
+    setTitle(recipe.title);
+    setContent(recipe.content);
+    setImageSrc(recipe.imageSrc);
+    setEditingIndex(index);
+  };
+
+  const handleDelete = (index) => {
+    const updatedRecipes = submittedRecipes.filter((_, i) => i !== index);
+    setSubmittedRecipes(updatedRecipes);
   };
 
   return (
@@ -41,11 +83,55 @@ const RecipeForm = () => {
         </div>
         <div className="flex-grow">
           <textarea
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
             placeholder="내용을 입력하세요"
             className="w-full h-48 resize-none p-2 text-lg border border-gray-300 rounded-lg"
           />
         </div>
       </div>
+      <div className="flex justify-end mt-5">
+        <button className="bg-blue-500 text-white px-4 py-2 rounded-lg mr-2" onClick={handleSubmit}>
+          {editingIndex !== null ? '수정 완료' : '레시피 등록'}
+        </button>
+        <button
+          className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg"
+          onClick={() => {
+            setTitle('');
+            setContent('');
+            setImageSrc('https://via.placeholder.com/200');
+            setEditingIndex(null);
+          }}
+        >
+          취소
+        </button>
+      </div>
+      {submittedRecipes.length > 0 && (
+        <div className="mt-10">
+          {submittedRecipes.map((recipe, index) => (
+            <div key={index} className="mb-5 p-5 border border-gray-300 rounded-lg shadow-md">
+              <h2 className="text-2xl mb-2">{recipe.title}</h2>
+              <img
+                src={recipe.imageSrc}
+                alt="Recipe"
+                className="w-48 h-48 object-cover border border-gray-300 rounded-lg mb-2"
+              />
+              <p>{recipe.content}</p>
+              <div className="flex justify-end mt-2">
+                <button
+                  className="bg-yellow-500 text-white px-4 py-2 rounded-lg mr-2"
+                  onClick={() => handleEdit(index)}
+                >
+                  수정
+                </button>
+                <button className="bg-red-500 text-white px-4 py-2 rounded-lg" onClick={() => handleDelete(index)}>
+                  삭제
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
