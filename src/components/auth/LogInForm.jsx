@@ -5,6 +5,7 @@ import AuthButton from './AuthButton';
 import { useState } from 'react';
 import api from '../../api/api';
 import useUserStore from '../../store/useUserStore';
+import useUserStore from '../../store/useUserStore';
 
 const LogInForm = () => {
   const { user, setUser } = useUserStore();
