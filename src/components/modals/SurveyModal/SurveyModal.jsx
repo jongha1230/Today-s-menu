@@ -64,8 +64,8 @@ function SurveyModal({ isModalOpen, toggleModal }) {
     setShowResults(true);
   };
 
-  const isNextDisabled = !surveyData[currentQuestion.key];
-  const isSubmitDisabled = !Object.values(surveyData).some((value) => value);
+  const isNextDisabled = isMultipleChoice ? !surveyData[currentQuestion.key]?.length : !surveyData[currentQuestion.key];
+  const isSubmitDisabled = !surveyData[currentQuestion.key];
 
   return (
     isModalOpen && (
