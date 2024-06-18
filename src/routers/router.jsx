@@ -3,16 +3,16 @@ import { MainLayout } from "../styles/MainLayout";
 import MainPage from "../pages/MainPage";
 
 const router = createBrowserRouter([
-    {
+  {
+    path: "/",
+    element: <MainLayout />,
+    children: [
+      {
         path: "/",
-        element: <MainLayout />,
-        children: [
-            {
-                path: "/",
-                element: <MainPage />,
-            }
-        ]
-    }
+        element: <MainPage />,
+      }
+    ]
+  }
 ]);
 
 export default router;
