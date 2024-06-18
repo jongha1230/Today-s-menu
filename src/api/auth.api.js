@@ -34,6 +34,43 @@ class AuthAPI {
       throw new Error(`회원가입 실패 : ${error.message}`);
     }
   };
+
+  SignOut = () => {
+    try {
+      const { error: signOutError } = supabase.auth.signOut();
+      if (signOutError) {
+        throw Error(signOutError.message);
+      }
+      console.log('로그아웃 성공!');
+    } catch (error) {
+      throw new Error(`로그인 실패 : ${error.message}`);
+    }
+  };
+
+  GetUser = async () => {
+    try {
+      const {
+        data: { user },
+        error: getUserError
+      } = await supabase.auth.getUser();
+      if (getUserError) {
+        throw Error(getUserError.message);
+      }
+
+      const {
+        data: [usersData],
+        error: usersError
+      } = await supabase.from('users').select().eq('id', user.id);
+      if (usersError) {
+        throw Error(usersError);
+      }
+      console.log(user);
+      console.log(usersData);
+      return { id: user.id, email: user.email, nickname: usersData.nickname };
+    } catch (error) {
+      throw new Error(`유저 정보 가져오기 실패 : ${error.message}`);
+    }
+  };
 }
 
 export default AuthAPI;
