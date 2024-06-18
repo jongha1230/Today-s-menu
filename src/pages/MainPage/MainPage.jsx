@@ -2,11 +2,14 @@ import React, { useEffect, useState } from 'react'
 import MainImage from '../../assets/images/MainImage.jpg'
 import supabase from '../../api/supabaseAPI';
 import SearchIcon from '@mui/icons-material/Search';
+import SurveyModal from '../../components/modals/SurveyModal/SurveyModal';
+
 
 const MainPage = ({ onSearch }) => {
     const [cards, setCards] = useState([]);
     const [filteredCards, setFilteredCards] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
         const Cards = async () => {
@@ -32,13 +35,26 @@ const MainPage = ({ onSearch }) => {
         onSearch(searchTerm);
     };
 
+    const handleModalToggle = () => {
+        setIsModalOpen(!isModalOpen);
+    };
+
     return (
         <div>
-            <div alt="사진박스" className="bg-gray-200 w-full h-48 flex items-center justify-center mt-5">
+            <div alt="사진박스" className="bg-gray-200 w-300 h-48 flex items-center justify-center mt-5">
                 <img src={MainImage} alt="음식사진" className="object-cover w-full h-full" />
             </div>
 
-            <div alt="설문조사" className="bg-gray-200 w-300 h-32 flex items-center justify-center mt-5"> 설문조사</div>
+            <button
+                alt="설문조사"
+                className="bg-gray-200 w-full h-32 flex items-center justify-center mt-5 text-3xl font-medium"
+                type="button"
+                onClick={handleModalToggle}
+            >
+                {' '}
+                설문조사 - 오늘 뭐 먹지?
+            </button>
+            <SurveyModal isModalOpen={isModalOpen} toggleModal={handleModalToggle} />
 
             {/* 검색 기능 */}
             <div className='flex items-center justify-center mt-2'>
