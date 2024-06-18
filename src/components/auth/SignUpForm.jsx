@@ -42,6 +42,9 @@ const SignUpForm = () => {
 
     api.auth.SignUp(values);
     setValues({ email: '', password: '', nickname: '' });
+    setConfirmPw('');
+
+    alert('회원가입 되었습니다.');
     navigate('/login');
   };
 
