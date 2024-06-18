@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react'
 import MainImage from '../../assets/images/MainImage.jpg'
 import supabase from '../../api/supabaseAPI';
 
-
-
 const MainPage = () => {
     const [cards, setCards] = useState([]);
 
@@ -30,7 +28,7 @@ const MainPage = () => {
             <div className="flex flex-wrap justify-center space-x-4 mt-5">
                 {cards.map((card) => (
                     <div key={card.id} className="bg-white w-52 h-48 rounded-lg p-4 border-2">
-                        <image> {card.thumbnail} </image>
+                        <image> 이미지 </image>
                         <div className='p-4'>
                             <hr className="border-gray-300 mb-2" />
                             <h3 className="text-lg font-bold mb-2"> {card.title} </h3>
@@ -45,7 +43,7 @@ const MainPage = () => {
                 </div> */}
 
                 <div>
-                    <a href='#' className='py-4 px-4 rounded-full bg-buttonPink'> 레시피 작성 </a>
+                    <a href='#' className='py-4 px-4 rounded-full bg-sub-color'> 레시피 작성 </a>
                 </div>
             </div>
 

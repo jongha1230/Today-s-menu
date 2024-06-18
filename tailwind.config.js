@@ -4,7 +4,9 @@ export default {
   theme: {
     extend: {
       colors: {
-        buttonPink: '#F2E0E0'
+        'theme-color': '#E0E2EF',
+        'sub-color': '#F2E0E0',
+        'default-color': '#EDEDED'
       }
     }
   },
