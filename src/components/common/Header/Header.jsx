@@ -8,7 +8,7 @@ const Header = () => {
         <div className="flex items-center space-x-4">
           <span> 사용자 님 </span>
           <span className="cursor-pointer"> 마이페이지 </span>
-          <a href="#" className="bg-black text-white px-4 py-2 rounded">
+          <a href="/login" className="bg-black text-white px-4 py-2 rounded">
             {' '}
             로그인{' '}
           </a>
