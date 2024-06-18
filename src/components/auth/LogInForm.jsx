@@ -2,8 +2,10 @@ import React from 'react';
 import AuthButton from './AuthButton';
 import { useState } from 'react';
 import api from '../../api/api';
+import useUserStore from '../../store/useUserStore';
 
 const LogInForm = () => {
+  const { user, setUser } = useUserStore();
   const [logIn, setLogIn] = useState({ email: '', password: '' });
 
   const onChangeHandler = (event) => {
@@ -23,8 +25,14 @@ const LogInForm = () => {
       return;
     }
 
-    const { user } = await api.auth.SignIn(logIn);
-    console.log(user.id, user.email);
+    await api.auth.SignIn(logIn);
+
+    const userInfo = await api.auth.GetUser();
+    console.log(userInfo);
+    setUser(userInfo);
+
+    setLogIn({ email: '', password: '' });
+    alert('로그인 되었습니다!');
   };
 
   const InputStyle = 'w-full p-1 outline outline-offset-2 outline-gray-400 rounded-md';

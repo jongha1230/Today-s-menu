@@ -41,6 +41,8 @@ const SignUpForm = () => {
 
     api.auth.SignUp(values);
     setValues({ email: '', password: '', nickname: '' });
+    setConfirmPw('');
+    alert('회원가입 되었습니다.');
   };
 
   const InputStyle = 'w-full p-1 outline outline-offset-2 outline-gray-400 rounded-md';
