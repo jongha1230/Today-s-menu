@@ -13,6 +13,16 @@ const LogInForm = () => {
 
   const onSubmitHandler = async (event) => {
     event.preventDefault();
+
+    if (!logIn.email.trim()) {
+      alert('이메일을 입력해주세요 !');
+      return;
+    }
+    if (!logIn.password.trim()) {
+      alert('비밀번호를 입력해주세요 !');
+      return;
+    }
+
     const { user } = await api.auth.SignIn(logIn);
     console.log(user.id, user.email);
   };
