@@ -3,12 +3,20 @@ import supabase from './supabaseAPI';
 class RecipeAPI {
   //레시피 추가 메서드
   async postRecipe(recipe) {
+    console.log(recipe.imageSrc);
+    const { data: uploadUrl, error: uploadError } = await supabase.storage
+      .from('images')
+      .upload('public/images/recipeimages', recipe.imageSrc, {
+        cacheControl: '3600',
+        upsert: false
+      });
     const { data, error } = await supabase.from('recipes').insert({
       recipeId: recipe.id,
       title: recipe.title,
       // userid: user.id,
       // nickname: user.nickname,
-      content: recipe.content
+      content: recipe.content,
+      thumbnail: uploadUrl
     });
   }
 

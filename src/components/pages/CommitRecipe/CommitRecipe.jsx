@@ -4,7 +4,7 @@ import api from '../../../api/api';
 import { v4 as uuid4 } from 'uuid';
 
 const RecipeForm = () => {
-  const [imageSrc, setImageSrc] = useState('https://via.placeholder.com/200');
+  const [imageSrc, setImageSrc] = useState(null);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [submittedRecipes, setSubmittedRecipes] = useState([]); // 제출된 레시피들의 목록
@@ -21,9 +21,10 @@ const RecipeForm = () => {
     const file = event.target.files[0];
     if (file) {
       const reader = new FileReader();
-      reader.onload = (e) => {
+      file.onload = (e) => {
         setImageSrc(e.target.result);
       };
+      console.log(file);
       reader.readAsDataURL(file);
     }
   };
