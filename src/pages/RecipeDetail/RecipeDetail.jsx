@@ -5,29 +5,55 @@ function RecipeDetail() {
   const [reviews, setReviews] = useState([
     {
       id: 1,
+      userId: 'user1',
       name: '김철1수',
       content: '맛없다맛없다맛없다맛없다맛없다맛없다맛없다'
     },
     {
       id: 2,
+      userId: 'user2',
       name: '이영희',
       content: '맛있다맛있다맛있다맛있다맛있다맛있다맛있다맛있다맛있다맛있다.'
     }
   ]);
 
-  const handleAddReview = () => {
+  const [showReviewsForm, setShowReviewsForm] = useState(false);
+  const [isLogin, setIsLogin] = useState(true);
+  const loginUserId = `user1`;
+  const loginId = 1;
+  const [editReviewId, setEditReviewId] = useState(loginId);
+  const [editReviewContent, setEditReviewContent] = useState('');
+
+  const handleToggleReview = () => {
     // 로그인 된 유저만 작성가능 or 보임
-    console.log('리뷰 추가 클릭');
+    // console.log('리뷰 추가 클릭');
+    if (isLogin) {
+      setShowReviewsForm((state) => !state);
+    } else {
+      alert('로그인을 해주세요');
+    }
   };
 
-  const handleUpdateReview = () => {
-    //작성한 본인만 수정
-    console.log('리뷰 수정 클릭');
+  const handleSubmitReview = (e) => {
+    e.preventDefault();
+    const newReviews = {
+      id: crypto.randomUUID(),
+      userId: loginUserId,
+      name: '{로그인한 유저닉네임}',
+      content: e.target.elements.reviewContent.value
+    };
+    setReviews([...reviews, newReviews]);
+    setShowReviewsForm(false);
+  };
+
+  const handleUpdateReview = (reviewId) => {
+    setEditReviewId(reviewId);
+    // console.log('리뷰 수정 클릭');
   };
 
   const handleDeleteReview = () => {
-    //작성한 본인만 삭제
-    console.log('리뷰 삭제 클릭');
+    setReviews((prev) => prev.filter((review) => review.id !== loginId));
+    // console.log('리뷰 삭제 클릭');
   };
 
   return (
@@ -84,12 +110,32 @@ function RecipeDetail() {
             <h2 className="text-lg font-bold">리뷰</h2>
             <button
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-              onClick={handleAddReview}
+              onClick={handleToggleReview}
+              // onClick={handleToggleReview(review.id)}
             >
               리뷰 작성
             </button>
           </div>
+          {showReviewsForm && (
+            <form onSubmit={handleSubmitReview} className="mb-4">
+              <textarea
+                name="reviewContent"
+                className="w-full p-2 border rounded mb-2"
+                placeholder="리뷰를 작성하세요"
+                required
+              ></textarea>
+              <div className="flex justify-end">
+                <button
+                  type="submit"
+                  className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+                >
+                  제출
+                </button>
+              </div>
+            </form>
+          )}
           {/* write */}
+
           <div className="space-y-4">
             {reviews.map((review) => (
               <div key={review.id} className="bg-white border rounded-lg p-4 shadow">
