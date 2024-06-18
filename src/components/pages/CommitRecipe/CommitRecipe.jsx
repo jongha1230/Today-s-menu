@@ -1,21 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import 'tailwindcss/tailwind.css';
+import api from '../../../api/api';
+import { v4 as uuid4 } from 'uuid';
 
 const RecipeForm = () => {
   const [imageSrc, setImageSrc] = useState('https://via.placeholder.com/200');
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [submittedRecipes, setSubmittedRecipes] = useState([]);
-  const [editingIndex, setEditingIndex] = useState(null);
+  const [submittedRecipes, setSubmittedRecipes] = useState([]); // 제출된 레시피들의 목록
+  const [editingIndex, setEditingIndex] = useState(null); // 현재 편집 중인 레시피의 인덱스
+  const [editedRecipe, setEditedRecipe] = useState(null); // 현재 편집 중인 레시피의 상태
 
-  // const fatchData = async () => {
-  //   const { data, error } = await supabase.from('recipes').select('*');
+  useEffect(() => {
+    const storedRecipes = JSON.parse(localStorage.getItem('recipes')) || [];
+    setSubmittedRecipes(storedRecipes);
+  }, []);
 
-  //   console.log(data);
-  // };
-
-  // fatchData();
-
+  //이미지 미리보기, 업로드
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -27,19 +28,30 @@ const RecipeForm = () => {
     }
   };
 
+  //레시피 등록, 수정완료
   const handleSubmit = () => {
     const newRecipe = {
+      id: uuid4(),
       title,
       content,
       imageSrc
     };
 
+    let updatedRecipes;
     if (editingIndex !== null) {
-      const updatedRecipes = submittedRecipes.map((recipe, index) => (index === editingIndex ? newRecipe : recipe));
-      setSubmittedRecipes(updatedRecipes);
+      updatedRecipes = submittedRecipes.map((recipe, index) => (index === editingIndex ? newRecipe : recipe));
       setEditingIndex(null);
     } else {
-      setSubmittedRecipes([...submittedRecipes, newRecipe]);
+      updatedRecipes = [...submittedRecipes, newRecipe];
+    }
+
+    setSubmittedRecipes(updatedRecipes);
+    localStorage.setItem('recipes', JSON.stringify(updatedRecipes));
+
+    if (editingIndex !== null) {
+      api.recipe.UpdateRecipe(newRecipe);
+    } else {
+      api.recipe.postRecipe(newRecipe);
     }
 
     setTitle('');
@@ -47,17 +59,51 @@ const RecipeForm = () => {
     setImageSrc('https://via.placeholder.com/200');
   };
 
+  //특정 인덱스에 해당하는 레시피를 편집하기 위해 호출될 때 실행
   const handleEdit = (index) => {
     const recipe = submittedRecipes[index];
     setTitle(recipe.title);
     setContent(recipe.content);
     setImageSrc(recipe.imageSrc);
     setEditingIndex(index);
+    setEditedRecipe(recipe);
+  };
+  // 수정 완료 후 제출
+  const handleEditSubmit = () => {
+    const updatedRecipe = {
+      id: editedRecipe.id,
+      title,
+      content,
+      imageSrc
+    };
+
+    const updatedRecipes = submittedRecipes.map((recipe, index) => (index === editingIndex ? updatedRecipe : recipe));
+    setSubmittedRecipes(updatedRecipes);
+    localStorage.setItem('recipes', JSON.stringify(updatedRecipes));
+    api.recipe.UpdateRecipe(updatedRecipe);
+
+    setTitle('');
+    setContent('');
+    setImageSrc('https://via.placeholder.com/200');
+    setEditingIndex(null);
+    setEditedRecipe(null);
   };
 
-  const handleDelete = (index) => {
+  const handleCancelEdit = () => {
+    setTitle('');
+    setContent('');
+    setImageSrc('https://via.placeholder.com/200');
+    setEditingIndex(null);
+    setEditedRecipe(null);
+  };
+
+  const handleDelete = async (index) => {
+    const recipe = submittedRecipes[index];
     const updatedRecipes = submittedRecipes.filter((_, i) => i !== index);
     setSubmittedRecipes(updatedRecipes);
+    localStorage.setItem('recipes', JSON.stringify(updatedRecipes));
+
+    await api.recipe.DeleteRecipe(recipe.id);
   };
 
   return (
@@ -91,25 +137,26 @@ const RecipeForm = () => {
         </div>
       </div>
       <div className="flex justify-end mt-5">
-        <button className="bg-blue-500 text-white px-4 py-2 rounded-lg mr-2" onClick={handleSubmit}>
-          {editingIndex !== null ? '수정 완료' : '레시피 등록'}
-        </button>
         <button
-          className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg"
+          className="bg-blue-500 text-white px-4 py-2 rounded-lg mr-2"
           onClick={() => {
-            setTitle('');
-            setContent('');
-            setImageSrc('https://via.placeholder.com/200');
-            setEditingIndex(null);
+            if (editingIndex !== null) {
+              handleEditSubmit();
+            } else {
+              handleSubmit();
+            }
           }}
         >
+          {editingIndex !== null ? '수정 완료' : '레시피 등록'}
+        </button>
+        <button className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg" onClick={handleCancelEdit}>
           취소
         </button>
       </div>
       {submittedRecipes.length > 0 && (
         <div className="mt-10">
           {submittedRecipes.map((recipe, index) => (
-            <div key={index} className="mb-5 p-5 border border-gray-300 rounded-lg shadow-md">
+            <div key={recipe.id} className="mb-5 p-5 border border-gray-300 rounded-lg shadow-md">
               <h2 className="text-2xl mb-2">{recipe.title}</h2>
               <img
                 src={recipe.imageSrc}
