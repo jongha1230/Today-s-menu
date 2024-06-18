@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import useModalStore from '../../../store/useModalStore';
 import useSurveyStore from '../../../store/useSurveyStore';
@@ -8,11 +8,28 @@ import FoodList from './FoodList';
 import ProgressBar from './ProgressBar';
 
 function SurveyModal({ isModalOpen, toggleModal }) {
-  const { currentPage, totalPages, nextPage, prevPage } = useModalStore();
+  const { currentPage, totalPages, nextPage, prevPage, resetPage } = useModalStore();
   const { questions, surveyData, setSurveyData } = useSurveyStore();
   const filteredFoods = useFilterFoods();
 
   const [showResults, setShowResults] = useState(false);
+
+  useEffect(() => {
+    if (!isModalOpen) {
+      setShowResults(false);
+      setSurveyData({
+        foodType: '',
+        taste: '',
+        ingredients: [],
+        isDiet: false,
+        allergies: [],
+        dietType: '',
+        mealTime: '',
+        price: ''
+      });
+      resetPage();
+    }
+  }, [isModalOpen, setSurveyData, resetPage]);
 
   const currentQuestion = questions[currentPage];
   const isMultipleChoice = currentQuestion.text.includes('복수 선택 가능');
@@ -60,8 +77,8 @@ function SurveyModal({ isModalOpen, toggleModal }) {
           {!showResults ? (
             <>
               <ProgressBar />
-              <h6 className="text-xl font-semibold mb-4">{currentQuestion.text}</h6>
-              <ul className="list-none">
+              <h6 className="text-3xl font-semibold">{currentQuestion.text}</h6>
+              <ul className="list-none flex flex-col gap-4">
                 {currentQuestion.options.map((option, index) => {
                   const isSelected = isMultipleChoice
                     ? surveyData[currentQuestion.key]?.includes(option)
@@ -69,7 +86,7 @@ function SurveyModal({ isModalOpen, toggleModal }) {
                   return (
                     <li
                       key={index}
-                      className={`mb-2 border-2 ${isSelected ? 'border-green-500 bg-green-100' : 'border-black'} border-solid w-96 h-12 text-center py-2.5 rounded-3xl cursor-pointer transition-all duration-200 ease-in-out`}
+                      className={`border-2 ${isSelected ? 'border-green-500 bg-green-100' : 'border-black'} border-solid w-96 h-12 text-center py-2.5 rounded-3xl cursor-pointer transition-all duration-200 ease-in-out`}
                       onClick={() => handleOptionClick(option)}
                     >
                       {option}
@@ -78,15 +95,15 @@ function SurveyModal({ isModalOpen, toggleModal }) {
                 })}
               </ul>
 
-              <div className="flex justify-between w-full mt-4">
-                <button onClick={handlePrev} disabled={currentPage === 0} className="p-2 bg-gray-300 rounded">
+              <div className="flex justify-center w-full gap-8">
+                <button onClick={handlePrev} disabled={currentPage === 0} className="px-8 py-3 bg-gray-300 rounded">
                   이전
                 </button>
                 {currentPage < totalPages - 1 ? (
                   <button
                     onClick={handleNext}
                     disabled={isNextDisabled}
-                    className={`p-2 ${isNextDisabled ? 'bg-gray-400' : 'bg-blue-500 text-white'} rounded`}
+                    className={`px-8 py-3 ${isNextDisabled ? 'bg-gray-400' : 'bg-blue-500 text-white'} rounded`}
                   >
                     다음
                   </button>
@@ -94,7 +111,7 @@ function SurveyModal({ isModalOpen, toggleModal }) {
                   <button
                     onClick={handleSubmit}
                     disabled={isSubmitDisabled}
-                    className={`p-2 ${isSubmitDisabled ? 'bg-gray-400' : 'bg-green-500 text-white'} rounded`}
+                    className={`px-8 py-3 ${isSubmitDisabled ? 'bg-gray-400' : 'bg-green-500 text-white'} rounded`}
                   >
                     제출
                   </button>
@@ -102,10 +119,10 @@ function SurveyModal({ isModalOpen, toggleModal }) {
               </div>
             </>
           ) : (
-            <div className="flex flex-col items-center">
-              <h2 className="text-2xl font-bold mb-4">추천 음식</h2>
+            <div className="flex flex-col w-full h-5/6 items-center justify-between">
+              <h2 className="text-4xl font-bold ">Today&apos;s MENU</h2>
               <FoodList foods={filteredFoods} />
-              <button onClick={toggleModal} className="mt-4 p-2 bg-red-500 text-white rounded">
+              <button onClick={toggleModal} className="px-8 py-3 bg-red-500 text-white rounded">
                 닫기
               </button>
             </div>
