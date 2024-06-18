@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import AuthButton from './AuthButton';
+import api from '../../api/api';
 
 const SignUpForm = () => {
   const [values, setValues] = useState({ email: '', password: '', nickname: '' });
@@ -8,11 +9,13 @@ const SignUpForm = () => {
   const onChangeHandler = (event) => {
     const { name, value } = event.target;
     setValues({ ...values, [name]: value });
-    console.log(values);
   };
 
   const onSubmitHandler = (event) => {
     event.preventDefault();
+
+    api.auth.SignUp(values);
+    setValues({ email: '', password: '', nickname: '' });
   };
 
   const InputStyle = 'w-full p-1 outline outline-offset-2 outline-gray-400 rounded-md';
@@ -27,6 +30,7 @@ const SignUpForm = () => {
           value={values.nickname}
           onChange={onChangeHandler}
           className={InputStyle}
+          required
         />
         <input
           type="text"
@@ -35,6 +39,7 @@ const SignUpForm = () => {
           value={values.email}
           onChange={onChangeHandler}
           className={InputStyle}
+          required
         />
         <input
           type="password"
@@ -43,8 +48,9 @@ const SignUpForm = () => {
           value={values.password}
           onChange={onChangeHandler}
           className={InputStyle}
+          required
         />
-        <input type="password" placeholder="비밀번호를 다시 한번 더 입력해주세요." className={InputStyle} />
+        <input type="password" placeholder="비밀번호를 다시 한번 더 입력해주세요." className={InputStyle} required />
         <AuthButton>회원가입하기</AuthButton>
       </form>
     </>
