@@ -1,10 +1,11 @@
-import React from 'react';
-import AuthButton from './AuthButton';
-import { useState } from 'react';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import api from '../../api/api';
+import AuthButton from './AuthButton';
 
 const LogInForm = () => {
   const [logIn, setLogIn] = useState({ email: '', password: '' });
+  const navigate = useNavigate();
 
   const onChangeHandler = (event) => {
     const { name, value } = event.target;
@@ -25,6 +26,7 @@ const LogInForm = () => {
 
     const { user } = await api.auth.SignIn(logIn);
     console.log(user.id, user.email);
+    navigate('/');
   };
 
   const InputStyle = 'w-full p-1 outline outline-offset-2 outline-gray-400 rounded-md';
@@ -51,6 +53,12 @@ const LogInForm = () => {
           required
         />
         <AuthButton>로그인</AuthButton>
+        <Link
+          to={'/signUp'}
+          className="w-8/12 p-2 outline outline-1 outline-gray-400 rounded-xl text-center bg-default-color hover:scale-110 ease-in duration-300 cursor-pointer shadow-md shadow-gray-300"
+        >
+          회원가입
+        </Link>
       </form>
     </>
   );

@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import AuthButton from './AuthButton';
+import { useNavigate } from 'react-router-dom';
 import api from '../../api/api';
+import AuthButton from './AuthButton';
 
 const SignUpForm = () => {
   const [values, setValues] = useState({ email: '', password: '', nickname: '' });
   const [confirmPw, setConfirmPw] = useState('');
-
+  const navigate = useNavigate();
   const onChangeHandler = (event) => {
     const { name, value } = event.target;
     setValues({ ...values, [name]: value });
@@ -41,6 +42,7 @@ const SignUpForm = () => {
 
     api.auth.SignUp(values);
     setValues({ email: '', password: '', nickname: '' });
+    navigate('/login');
   };
 
   const InputStyle = 'w-full p-1 outline outline-offset-2 outline-gray-400 rounded-md';
