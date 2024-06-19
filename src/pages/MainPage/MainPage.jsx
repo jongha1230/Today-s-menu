@@ -98,8 +98,12 @@ const MainPage = ({ onSearch }) => {
                                     <hr className="border-gray-300 mb-2" />
                                     <h3 className="text-lg font-bold mb-2">{card.title}</h3>
                                     <p className="text-gray-600 mb-1 text-sm justify-between=">
-                                        {card.nickname} {new Date(card.created_at).toLocaleDateString()}
+                                        {card.nickname}
                                     </p>
+                                    <p className="text-gray-600 mb-1 text-sm justify-between=">
+                                        {new Date(card.created_at).toLocaleDateString()}
+                                    </p>
+
                                 </div>
                             </div>
                         ))
