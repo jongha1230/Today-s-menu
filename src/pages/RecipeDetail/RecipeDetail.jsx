@@ -75,7 +75,9 @@ function RecipeDetail() {
 
   const handleDeleteReview = (reviewId) => {
     if (reviews.find((review) => review.id === reviewId)?.userId === loginUser.userId) {
-      setReviews((prev) => prev.filter((review) => review.id !== reviewId));
+      if (confirm('삭제하시겠습니까?')) {
+        setReviews((prev) => prev.filter((review) => review.id !== reviewId));
+      }
     } else {
       alert('본인이 작성한 리뷰만 삭제할 수 있습니다.');
     }
