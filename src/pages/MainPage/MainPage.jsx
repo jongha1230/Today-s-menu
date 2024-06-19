@@ -76,14 +76,16 @@ const MainPage = ({ onSearch }) => {
                     </button>
                 </div>
 
+
                 <div className="flex justify-center mt-5">
                     <Link
-                        href="/test"
+                        to={'/recipe'}
                         className="py-4 px-4 rounded-full  bg-sub-color hover:bg-default-color text-center mb-5 ml-10"
                     >
                         레시피 작성
                     </Link>
                 </div>
+
             </div>
 
             <div className='flex justify-center mt-5'>
