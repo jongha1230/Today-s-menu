@@ -1,10 +1,11 @@
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import api from '../../api/api';
-import AuthButton from './AuthButton';
 import useUserStore from '../../store/useUserStore';
+import AuthButton from './AuthButton';
 
 const LogInForm = () => {
-  const { user, setUser } = useUserStore();
+  const { setUser } = useUserStore();
   const [logIn, setLogIn] = useState({ email: '', password: '' });
   const navigate = useNavigate();
 
