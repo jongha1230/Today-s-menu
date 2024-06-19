@@ -7,6 +7,7 @@ import SurveyModal from '../../components/modals/SurveyModal/SurveyModal';
 import useMainStore from '../../store/useMainStore';
 import fectchRecipes from '../../api/main.api';
 
+
 const MainPage = ({ onSearch }) => {
     const { filteredCards, setCards, setFilteredCards, searchTerm, setSearchTerm, isModalOpen, handleModalToggle } = useMainStore();
 
