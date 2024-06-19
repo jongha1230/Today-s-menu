@@ -19,9 +19,16 @@ class RecipeAPI {
         return;
       }
 
-      thumbnailUrl = 'public/images/' + uploadData.path;
+      thumbnailUrl = 'images/' + uploadData.path + '.' + file.name.split('.').pop();
     }
-
+    console.log('Inserting recipe with data:', {
+      id: recipe.id,
+      title: recipe.title,
+      user_id: userId,
+      nickname: nickname,
+      content: recipe.content,
+      thumbnail: thumbnailUrl
+    });
     // 레시피 데이터베이스에 추가
     const { data, error } = await supabase.from('recipes').insert({
       id: recipe.id,
@@ -57,7 +64,7 @@ class RecipeAPI {
       //스토리지 이미지 삭제
       const { data: imageDeleteData, error: imageDeleteError } = await supabase.storage
         .from('images')
-        .remove(`/recipeimages/${recipe.id}.${thumbnailData[0].thumbnail.split('.').pop()}`);
+        .remove(`recipeimages/${recipe.id}.${thumbnailData[0].thumbnail.split('.').pop()}`);
 
       if (imageDeleteError) {
         console.error('Error deleting image:', imageDeleteError);
@@ -69,6 +76,7 @@ class RecipeAPI {
   }
 
   async UpdateRecipe(recipe, file) {
+    console.log(recipe);
     const { data: existingRecipe, error: existingRecipeError } = await supabase
       .from('recipes')
       .select('thumbnail')
@@ -80,7 +88,7 @@ class RecipeAPI {
       return;
     }
 
-    const newThumbnail = existingRecipe.thumbnail || null;
+    let newThumbnail = existingRecipe.thumbnail || null;
 
     // 새로운 파일이 있는 경우
     if (file) {
