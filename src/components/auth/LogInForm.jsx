@@ -2,9 +2,6 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import api from '../../api/api';
 import AuthButton from './AuthButton';
-import { useState } from 'react';
-import api from '../../api/api';
-import useUserStore from '../../store/useUserStore';
 import useUserStore from '../../store/useUserStore';
 
 const LogInForm = () => {
