@@ -1,7 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import api from '../../api/api';
-import useUserStore from '../../store/useUserStore';
 import AuthButton from './AuthButton';
+import useUserStore from '../../store/useUserStore';
 
 const LogInForm = () => {
   const { user, setUser } = useUserStore();
