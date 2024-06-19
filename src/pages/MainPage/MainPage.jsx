@@ -48,7 +48,7 @@ const MainPage = ({ onSearch }) => {
             <div className="flex flex-col items-center justify-center">
                 <button
                     alt="설문조사"
-                    className="bg-theme-color py-4 px-4 flex items-center justify-center mt-10 text-3xl font-medium rounded-full "
+                    className="bg-theme-color py-4 px-4 flex items-center justify-center mt-10 text-3xl font-medium rounded-full hover:scale-110 transition-transform duration-200"
                     type="button"
                     onClick={handleModalToggle}
                 >
