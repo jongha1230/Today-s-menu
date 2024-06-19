@@ -2,10 +2,13 @@ import { createBrowserRouter } from 'react-router-dom';
 import LogInForm from '../components/auth/LogInForm';
 import SignUpForm from '../components/auth/SignUpForm';
 import AuthPage from '../pages/AuthPage';
-import CommitRecipe from '../pages/CommitRecipe/CommitRecipe';
 import MainPage from '../pages/MainPage';
 import RecipeDetail from '../pages/RecipeDetail';
 import MainLayout from '../styles/MainLayout/MainLayout';
+import MyPage from '../pages/MyPage/MyPage';
+import MyPageForm from '../components/auth/MyPageForm';
+import MyPageModify from '../components/auth/MyPageModify';
+import CommitRecipe from '../pages/CommitRecipe/CommitRecipe';
 
 const router = createBrowserRouter([
   {
@@ -20,7 +23,15 @@ const router = createBrowserRouter([
         path: '/recipes',
         element: <RecipeDetail />
       },
-      { path: '/recipe', element: <CommitRecipe /> }
+      { path: '/recipe', element: <CommitRecipe /> },
+      {
+        path: '/',
+        element: <MyPage />,
+        children: [
+          { path: '/myPage', element: <MyPageForm /> },
+          { path: '/modify', element: <MyPageModify /> }
+        ]
+      }
     ]
   },
   {

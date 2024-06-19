@@ -34,7 +34,7 @@ function RecipeDetail() {
 
   useEffect(() => {
     const getLoggedInUser = async () => {
-      let { data: users, error } = await supabase.from('users').select('id');
+      let { data: users, error } = await supabase.from('users').select('id,nickname,profile_picture_url');
       setLoginUser(users);
     };
     getLoggedInUser();
