@@ -1,14 +1,17 @@
 import { useEffect, useState } from 'react';
 import { v4 as uuid4 } from 'uuid';
 import api from '../../api/api';
+import useUserStore from '../../store/useUserStore';
 
 const RecipeForm = () => {
   const [imageSrc, setImageSrc] = useState('https://via.placeholder.com/200');
+  const [imageFile, setImageFile] = useState([]);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [submittedRecipes, setSubmittedRecipes] = useState([]); // 제출된 레시피들의 목록
   const [editingIndex, setEditingIndex] = useState(null); // 현재 편집 중인 레시피의 인덱스
   const [editedRecipe, setEditedRecipe] = useState(null); // 현재 편집 중인 레시피의 상태
+  const { user } = useUserStore();
 
   useEffect(() => {
     const storedRecipes = JSON.parse(localStorage.getItem('recipes')) || [];
@@ -19,6 +22,7 @@ const RecipeForm = () => {
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
+      setImageFile(file);
       const reader = new FileReader();
       reader.onload = (e) => {
         setImageSrc(e.target.result);
@@ -49,9 +53,9 @@ const RecipeForm = () => {
     localStorage.setItem('recipes', JSON.stringify(updatedRecipes));
 
     if (editingIndex !== null) {
-      api.recipe.UpdateRecipe(newRecipe);
+      api.recipe.UpdateRecipe(newRecipe, imageFile);
     } else {
-      api.recipe.postRecipe(newRecipe);
+      api.recipe.postRecipe(newRecipe, imageFile, user.id, user.nickname);
     }
 
     setTitle('');
