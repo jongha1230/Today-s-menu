@@ -13,7 +13,7 @@ class RecipeAPI {
     const { data, error } = await supabase.from('recipes').insert({
       recipeId: recipe.id,
       title: recipe.title,
-      // userid: user.id,
+      // userId: user.id,
       // nickname: user.nickname,
       content: recipe.content,
       thumbnail: recipe.imageSrc

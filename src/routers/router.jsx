@@ -1,9 +1,37 @@
 import { createBrowserRouter } from 'react-router-dom';
-import CommitRecipe from '../components/pages/CommitRecipe/CommitRecipe';
+import LogInForm from '../components/auth/LogInForm';
+import SignUpForm from '../components/auth/SignUpForm';
+import AuthPage from '../pages/AuthPage';
+import CommitRecipe from '../pages/DetailTest/CommitRecipe';
+import MainPage from '../pages/MainPage';
+import RecipeDetail from '../pages/RecipeDetail';
+import MainLayout from '../styles/MainLayout/MainLayout';
 
 const router = createBrowserRouter([
   {
-    path: '/CommitRecipe',
+    path: '/',
+    element: <MainLayout />,
+    children: [
+      {
+        path: '/',
+        element: <MainPage />
+      },
+      {
+        path: '/recipe',
+        element: <RecipeDetail />
+      }
+    ]
+  },
+  {
+    path: '/',
+    element: <AuthPage />,
+    children: [
+      { path: '/logIn', element: <LogInForm /> },
+      { path: '/signUp', element: <SignUpForm /> }
+    ]
+  },
+  {
+    path: '/test',
     element: <CommitRecipe />
   }
 ]);

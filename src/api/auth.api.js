@@ -1,63 +1,76 @@
-import { callSupabaseAuth } from "../components/shared/utils/callSupabaseAuth";
-import supabase from "./supabaseAPI";
+import supabase from './supabaseAPI';
 
 class AuthAPI {
-  // 회원 가입 메서드
-  async signUp(email, password, nickname) {
-    return callSupabaseAuth(
-      async () => {
-        const { data: signUpData, error: signUpError } =
-          await supabase.auth.signUp({ email, password });
-        if (signUpError) throw signUpError;
+  SignUp = async ({ email, password, nickname }) => {
+    try {
+      const { data: signUpData, error: signUpError } = await supabase.auth.signUp({ email, password });
+      const userId = signUpData.user.id;
+      if (signUpError) {
+        throw Error(signUpError.message);
+      }
 
-        // 추가 정보 users 테이블에 저장
-        const userId = signUpData.user.id;
+      const { data: userData, error: userError } = await supabase.from('users').insert({ id: userId, nickname });
+      if (userError) {
+        throw Error(userError.message);
+      }
 
-        const { error: userError } = await supabase
-          .from("users")
-          .insert([{ id: userId, nickname }]);
-        if (userError) throw userError;
+      console.log('회원가입 성공!');
 
-        return signUpData;
-      },
-      "회원가입 성공",
-      "회원가입 실패"
-    );
-  }
+      return { signUpData, userData };
+    } catch (error) {
+      throw new Error(`회원가입 실패 : ${error.message}`);
+    }
+  };
 
-  // 로그인 메서드
-  async signIn(email, password) {
-    return callSupabaseAuth(
-      () => supabase.auth.signInWithPassword({ email, password }),
-      "로그인 성공",
-      "로그인 실패"
-    );
-  }
+  SignIn = async ({ email, password }) => {
+    try {
+      const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({ email, password });
+      if (signInError) {
+        throw Error(signInError.message);
+      }
+      console.log('로그인 성공!');
+      return signInData;
+    } catch (error) {
+      throw new Error(`회원가입 실패 : ${error.message}`);
+    }
+  };
 
-  // 로그아웃 메서드
-  async signOut() {
-    return callSupabaseAuth(
-      () => supabase.auth.signOut(),
-      "로그아웃 성공",
-      "로그아웃 실패"
-    );
-  }
+  SignOut = () => {
+    try {
+      const { error: signOutError } = supabase.auth.signOut();
+      if (signOutError) {
+        throw Error(signOutError.message);
+      }
+      console.log('로그아웃 성공!');
+    } catch (error) {
+      throw new Error(`로그인 실패 : ${error.message}`);
+    }
+  };
 
-  // 유저 정보 가져오는 메서드
-  async getUser() {
-    return callSupabaseAuth(
-      async () => {
-        const {
-          data: { session },
-          error,
-        } = await supabase.auth.getSession();
-        if (error) throw error;
-        return { user: session.user };
-      },
-      "유저 정보 가져오기 성공",
-      "유저 정보 가져오기 실패"
-    );
-  }
+  GetUser = async () => {
+    try {
+      const {
+        data: { user },
+        error: getUserError
+      } = await supabase.auth.getUser();
+      if (getUserError) {
+        throw Error(getUserError.message);
+      }
+
+      const {
+        data: [usersData],
+        error: usersError
+      } = await supabase.from('users').select().eq('id', user.id);
+      if (usersError) {
+        throw Error(usersError);
+      }
+      console.log(user);
+      console.log(usersData);
+      return { id: user.id, email: user.email, nickname: usersData.nickname };
+    } catch (error) {
+      throw new Error(`유저 정보 가져오기 실패 : ${error.message}`);
+    }
+  };
 }
 
 export default AuthAPI;
