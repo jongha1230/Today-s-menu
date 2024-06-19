@@ -8,6 +8,7 @@ import MainLayout from '../styles/MainLayout/MainLayout';
 import MyPage from '../pages/MyPage/MyPage';
 import MyPageForm from '../components/auth/MyPageForm';
 import MyPageModify from '../components/auth/MyPageModify';
+import CommitRecipe from '../pages/CommitRecipe/CommitRecipe';
 
 const router = createBrowserRouter([
   {
@@ -19,9 +20,10 @@ const router = createBrowserRouter([
         element: <MainPage />
       },
       {
-        path: '/recipe',
+        path: '/recipes',
         element: <RecipeDetail />
       },
+      { path: '/recipe', element: <CommitRecipe /> },
       {
         path: '/',
         element: <MyPage />,
