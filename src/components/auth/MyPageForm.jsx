@@ -1,10 +1,11 @@
 import React from 'react';
-import useUserStore from '../../store/useUserStore';
 import { IoIosMail } from 'react-icons/io';
 import { Link } from 'react-router-dom';
+import defaultProfileImage from '../../assets/images/memoticon.png';
+import useUserStore from '../../store/useUserStore';
 
 const MyPageForm = () => {
-  const { user, setUser } = useUserStore();
+  const { user } = useUserStore();
   return (
     <div className="w-8/12 h-full p-5 flex flex-col gap-6 justify-center">
       <div
@@ -13,7 +14,7 @@ const MyPageForm = () => {
       >
         <div className="w-40 h-40 rounded-full overflow-hidden">
           <img
-            src={user.profile_picture_url ? user.profile_picture_url : '/src/assets/images/memoticon.png'}
+            src={user.profile_picture_url ? user.profile_picture_url : defaultProfileImage}
             className="w-44 h-full object-cover"
           />
         </div>
