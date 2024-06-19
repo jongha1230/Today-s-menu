@@ -6,6 +6,9 @@ import CommitRecipe from '../pages/DetailTest/CommitRecipe';
 import MainPage from '../pages/MainPage';
 import RecipeDetail from '../pages/RecipeDetail';
 import MainLayout from '../styles/MainLayout/MainLayout';
+import MyPage from '../pages/MyPage/MyPage';
+import MyPageForm from '../components/auth/MyPageForm';
+import MyPageModify from '../components/auth/MyPageModify';
 
 const router = createBrowserRouter([
   {
@@ -28,6 +31,14 @@ const router = createBrowserRouter([
     children: [
       { path: '/logIn', element: <LogInForm /> },
       { path: '/signUp', element: <SignUpForm /> }
+    ]
+  },
+  {
+    path: '/',
+    element: <MyPage />,
+    children: [
+      { path: '/myPage', element: <MyPageForm /> },
+      { path: '/modify', element: <MyPageModify /> }
     ]
   },
   {

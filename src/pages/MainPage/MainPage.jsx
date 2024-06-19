@@ -2,8 +2,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import React, { useCallback, useEffect, useState } from 'react';
 import { LuPointer } from 'react-icons/lu';
 import { Link } from 'react-router-dom';
-
-import { supabase } from '../../api/supabaseAPI';
+import supabase from '../../api/supabaseAPI';
 import MainImage from '../../assets/images/MainImage.jpg';
 import SurveyModal from '../../components/modals/SurveyModal/SurveyModal';
 
