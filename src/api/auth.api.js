@@ -62,13 +62,33 @@ class AuthAPI {
         error: usersError
       } = await supabase.from('users').select().eq('id', user.id);
       if (usersError) {
-        throw Error(usersError);
+        throw Error(usersError.message);
       }
       console.log(user);
       console.log(usersData);
-      return { id: user.id, email: user.email, nickname: usersData.nickname };
+      return {
+        id: user.id,
+        email: usersData.email,
+        nickname: usersData.nickname,
+        profile_picture_url: usersData.profile_picture_url
+      };
     } catch (error) {
       throw new Error(`유저 정보 가져오기 실패 : ${error.message}`);
+    }
+  };
+
+  UpdateUser = async (userInfo) => {
+    try {
+      const { data: updateUserData, error: updateUserError } = await supabase
+        .from('users')
+        .update(userInfo)
+        .eq('id', userInfo.id);
+      if (updateUserError) {
+        throw Error(updateUserError.message);
+      }
+      return updateUserData;
+    } catch (error) {
+      throw new Error(`유저 정보 수정 실패 : ${error.message}`);
     }
   };
 }
