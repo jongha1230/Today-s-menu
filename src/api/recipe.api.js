@@ -36,7 +36,8 @@ class RecipeAPI {
       .from('recipes')
       .update({
         title: recipe.title,
-        content: recipe.content
+        content: recipe.content,
+        thumbnail: recipe.imageSrc
       })
       .eq('recipeId', recipe.id);
   }

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import 'tailwindcss/tailwind.css';
-import api from '../../../api/api';
+import api from '../../api/api';
 import { v4 as uuid4 } from 'uuid';
 
 const RecipeForm = () => {
