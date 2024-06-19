@@ -104,7 +104,7 @@ const MainPage = ({ onSearch }) => {
                             </div>
                         ))
                     ) : (
-                        <div className="h-[370px]">검색 결과가 없습니다.</div>
+                        <div className="col-span-full h-[370px] flex items-start justify-center">검색 결과가 없습니다.</div>
                     )}
                 </div>
             </div>
