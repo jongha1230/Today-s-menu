@@ -19,7 +19,17 @@ class RecipeAPI {
         return;
       }
 
-      thumbnailUrl = 'images/' + uploadData.path + '.' + file.name.split('.').pop();
+      // 저장된 이미지를 다시 URL로 불러오기
+      const { data: reloadData, error: reloadError } = await supabase.storage
+        .from('images')
+        .getPublicUrl(`recipeimages/${recipe.id}.${file.name.split('.').pop()}`);
+
+      if (reloadError) {
+        console.error('Error getting public URL:', reloadError);
+        return;
+      }
+
+      thumbnailUrl = reloadData.publicUrl;
     }
     console.log('Inserting recipe with data:', {
       id: recipe.id,
@@ -75,6 +85,7 @@ class RecipeAPI {
     }
   }
 
+  // 업데이트 메서드
   async UpdateRecipe(recipe, file) {
     console.log(recipe);
     const { data: existingRecipe, error: existingRecipeError } = await supabase
@@ -114,7 +125,18 @@ class RecipeAPI {
         console.error('Error uploading new file:', uploadError);
         return;
       }
-      newThumbnail = uploadData.path;
+
+      // 저장된 이미지를 다시 URL로 불러오기
+      const { data: reloadData, error: reloadError } = await supabase.storage
+        .from('images')
+        .getPublicUrl(`recipeimages/${recipe.id}.${file.name.split('.').pop()}`);
+
+      if (reloadError) {
+        console.error('Error getting public URL:', reloadError);
+        return;
+      }
+
+      newThumbnail = reloadData.publicUrl;
     }
 
     // 레시피 업데이트
