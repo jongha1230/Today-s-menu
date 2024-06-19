@@ -1,7 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import api from '../../api/api';
 import AuthButton from './AuthButton';
-import { useState } from 'react';
 import useUserStore from '../../store/useUserStore';
 
 const LogInForm = () => {

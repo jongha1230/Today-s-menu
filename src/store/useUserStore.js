@@ -1,12 +1,12 @@
 import { create } from 'zustand';
-import { immer } from 'zustand/middleware/immer';
 import { persist } from 'zustand/middleware';
+import { immer } from 'zustand/middleware/immer';
 
 const useUserStore = create(
   persist(
     immer((set) => {
       return {
-        user: {},
+        user: null,
         setUser: function (userInfo) {
           set(function () {
             return {
