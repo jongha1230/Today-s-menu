@@ -6,7 +6,7 @@ const useUserStore = create(
   persist(
     immer((set) => {
       return {
-        user: {},
+        user: null,
         setUser: function (userInfo) {
           set(function () {
             return {

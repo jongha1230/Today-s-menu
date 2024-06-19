@@ -48,7 +48,7 @@ const MainPage = ({ onSearch }) => {
             <div className="flex flex-col items-center justify-center">
                 <button
                     alt="설문조사"
-                    className="bg-theme-color py-4 px-4 flex items-center justify-center mt-10 text-3xl font-medium rounded-full "
+                    className="bg-theme-color py-4 px-4 flex items-center justify-center mt-10 text-3xl font-medium rounded-full hover:scale-110 transition-transform duration-200"
                     type="button"
                     onClick={handleModalToggle}
                 >
@@ -98,13 +98,17 @@ const MainPage = ({ onSearch }) => {
                                     <hr className="border-gray-300 mb-2" />
                                     <h3 className="text-lg font-bold mb-2">{card.title}</h3>
                                     <p className="text-gray-600 mb-1 text-sm justify-between=">
-                                        {card.nickname} {new Date(card.created_at).toLocaleDateString()}
+                                        {card.nickname}
                                     </p>
+                                    <p className="text-gray-600 mb-1 text-sm justify-between=">
+                                        {new Date(card.created_at).toLocaleDateString()}
+                                    </p>
+
                                 </div>
                             </div>
                         ))
                     ) : (
-                        <div className="h-[370px]">검색 결과가 없습니다.</div>
+                        <div className="col-span-full h-[370px] flex items-start justify-center">검색 결과가 없습니다.</div>
                     )}
                 </div>
             </div>
