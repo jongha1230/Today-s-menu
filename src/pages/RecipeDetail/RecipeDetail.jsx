@@ -1,33 +1,45 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import supabase from '../../api/supabaseAPI';
 
 function RecipeDetail() {
   const [reviews, setReviews] = useState([
-    {
-      id: 1,
-      userId: 'user1',
-      name: '김철1수',
-      content: '맛없다맛없다맛없다맛없다맛없다맛없다맛없다',
-      isLogin: false
-    },
-    {
-      id: 2,
-      userId: 'user2',
-      name: '이영희',
-      content: '맛있다맛있다맛있다맛있다맛있다맛있다맛있다맛있다맛있다맛있다.',
-      isLogin: false
-    }
+    // {
+    //   id: 1,
+    //   userId: 'user1',
+    //   name: '김철1수',
+    //   content: '맛없다맛없다맛없다맛없다맛없다맛없다맛없다',
+    //   isLogin: false
+    // },
+    // {
+    //   id: 2,
+    //   userId: 'user2',
+    //   name: '이영희',
+    //   content: '맛있다맛있다맛있다맛있다맛있다맛있다맛있다맛있다맛있다맛있다.',
+    //   isLogin: false
+    // }
+    []
   ]);
 
   const [showReviewsForm, setShowReviewsForm] = useState(false);
   const [editReviewId, setEditReviewId] = useState(null);
   const [editReviewContent, setEditReviewContent] = useState('');
-  const loginUser = {
-    id: 3,
-    isLogin: true,
-    userId: 'user3',
-    userName: '김나비'
-  };
+  // const loginUser = {
+  //   id: 3,
+  //   isLogin: true,
+  //   userId: 'user3',
+  //   userName: '김나비'
+  // };
+  const [loginUser, setLoginUser] = useState(null);
+
+  useEffect(() => {
+    const getLoggedInUser = async () => {
+      let { data: users, error } = await supabase.from('users').select('id');
+      setLoginUser(users);
+    };
+    getLoggedInUser();
+  }, []);
+  console.log(loginUser);
 
   const handleToggleReview = () => {
     if (loginUser.isLogin) {
