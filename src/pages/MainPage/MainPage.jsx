@@ -85,25 +85,28 @@ const MainPage = ({ onSearch }) => {
                     </Link>
                 </div>
             </div>
-            <div className="flex flex-wrap justify-center space-x-4 mt-5">
-                {filteredCards.length > 0 ? (
-                    filteredCards.slice(0, 4).map((card) => (
-                        <div key={card.recipeId} className="bg-white w-52 h-74 rounded-lg p-4 border-2 mb-5">
-                            <div>
-                                <img src={card.thumbnail} alt={card.title} className="object-cover w-full rounded-lg" />
+
+            <div className='flex justify-center mt-5'>
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
+                    {filteredCards.length > 0 ? (
+                        filteredCards.map((card) => (
+                            <div key={card.recipeId} className="bg-white w-52 h-74 rounded-lg p-4 border-2 mb-5 m-2">
+                                <div>
+                                    <img src={card.thumbnail} alt={card.title} className="object-cover w-full rounded-lg" />
+                                </div>
+                                <div className="p-4">
+                                    <hr className="border-gray-300 mb-2" />
+                                    <h3 className="text-lg font-bold mb-2">{card.title}</h3>
+                                    <p className="text-gray-600 mb-1 text-sm justify-between=">
+                                        {card.nickname} {new Date(card.created_at).toLocaleDateString()}
+                                    </p>
+                                </div>
                             </div>
-                            <div className="p-4">
-                                <hr className="border-gray-300 mb-2" />
-                                <h3 className="text-lg font-bold mb-2">{card.title}</h3>
-                                <p className="text-gray-600 mb-1 text-sm justify-between=">
-                                    {card.nickname} {new Date(card.created_at).toLocaleDateString()}
-                                </p>
-                            </div>
-                        </div>
-                    ))
-                ) : (
-                    <div className="h-[370px]">검색 결과가 없습니다.</div>
-                )}
+                        ))
+                    ) : (
+                        <div className="h-[370px]">검색 결과가 없습니다.</div>
+                    )}
+                </div>
             </div>
         </div>
     );
