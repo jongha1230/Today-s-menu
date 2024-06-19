@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import api from '../../api/api';
 import useUserStore from '../../store/useUserStore';
