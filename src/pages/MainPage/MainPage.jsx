@@ -2,7 +2,6 @@ import SearchIcon from '@mui/icons-material/Search';
 import React, { useCallback, useEffect, useState } from 'react';
 import { LuPointer } from 'react-icons/lu';
 import { Link } from 'react-router-dom';
-
 import supabase from '../../api/supabaseAPI';
 import MainImage from '../../assets/images/MainImage.jpg';
 import SurveyModal from '../../components/modals/SurveyModal/SurveyModal';
@@ -78,7 +77,7 @@ const MainPage = ({ onSearch }) => {
 
         <div className="flex justify-center mt-5">
           <Link
-            href="/test"
+            to={'/recipe'}
             className="py-4 px-4 rounded-full  bg-sub-color hover:bg-default-color text-center mb-5 ml-10"
           >
             레시피 작성

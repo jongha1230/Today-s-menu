@@ -2,14 +2,26 @@ import React, { useState, useEffect } from 'react';
 import 'tailwindcss/tailwind.css';
 import api from '../../api/api';
 import { v4 as uuid4 } from 'uuid';
+import useUserStore from '../../store/useUserStore';
+import { useCreateRecipe, useDeleteRecipe, useUpdateRecipe } from '../../components/shared/hooks/useRecipeQueries';
 
 const RecipeForm = () => {
   const [imageSrc, setImageSrc] = useState('https://via.placeholder.com/200');
+  const [selectedFile, setSelectedFile] = useState(null);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [submittedRecipes, setSubmittedRecipes] = useState([]); // 제출된 레시피들의 목록
   const [editingIndex, setEditingIndex] = useState(null); // 현재 편집 중인 레시피의 인덱스
   const [editedRecipe, setEditedRecipe] = useState(null); // 현재 편집 중인 레시피의 상태
+  const { user } = useUserStore();
+
+  const { mutate: createRecipe } = useCreateRecipe();
+  const { mutate: updateRecipe } = useUpdateRecipe();
+  const { mutate: deleteRecipe } = useDeleteRecipe();
+
+  console.log('test');
+
+  console.log(user.id);
 
   useEffect(() => {
     const storedRecipes = JSON.parse(localStorage.getItem('recipes')) || [];
@@ -20,6 +32,8 @@ const RecipeForm = () => {
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
+      setSelectedFile(file);
+
       const reader = new FileReader();
       reader.onload = (e) => {
         setImageSrc(e.target.result);
@@ -35,7 +49,7 @@ const RecipeForm = () => {
       id: uuid4(),
       title,
       content,
-      imageSrc
+      imageSrc //미리보기용 이미지 url 설정
     };
 
     let updatedRecipes;
@@ -48,16 +62,18 @@ const RecipeForm = () => {
 
     setSubmittedRecipes(updatedRecipes);
     localStorage.setItem('recipes', JSON.stringify(updatedRecipes));
+    console.log(user.id, user.nickname);
 
     if (editingIndex !== null) {
-      api.recipe.UpdateRecipe(newRecipe);
+      updateRecipe(newRecipe, selectedFile);
     } else {
-      api.recipe.postRecipe(newRecipe);
+      createRecipe(newRecipe, selectedFile, user.id, user.nickname);
     }
 
     setTitle('');
     setContent('');
     setImageSrc('https://via.placeholder.com/200');
+    setSelectedFile(null);
   };
 
   //특정 인덱스에 해당하는 레시피를 편집하기 위해 호출될 때 실행
@@ -81,13 +97,14 @@ const RecipeForm = () => {
     const updatedRecipes = submittedRecipes.map((recipe, index) => (index === editingIndex ? updatedRecipe : recipe));
     setSubmittedRecipes(updatedRecipes);
     localStorage.setItem('recipes', JSON.stringify(updatedRecipes));
-    api.recipe.UpdateRecipe(updatedRecipe);
+    updateRecipe(updatedRecipe, selectedFile);
 
     setTitle('');
     setContent('');
     setImageSrc('https://via.placeholder.com/200');
     setEditingIndex(null);
     setEditedRecipe(null);
+    setSelectedFile(null);
   };
 
   const handleCancelEdit = () => {
@@ -98,13 +115,13 @@ const RecipeForm = () => {
     setEditedRecipe(null);
   };
 
-  const handleDelete = async (index) => {
+  const handleDelete = (index) => {
     const recipe = submittedRecipes[index];
     const updatedRecipes = submittedRecipes.filter((_, i) => i !== index);
     setSubmittedRecipes(updatedRecipes);
     localStorage.setItem('recipes', JSON.stringify(updatedRecipes));
 
-    await api.recipe.DeleteRecipe(recipe.id);
+    deleteRecipe(recipe.id);
   };
 
   return (
