@@ -29,9 +29,9 @@ export const useRecipeDetail = (recipeId) => {
 export const useCreateRecipe = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (newRecipe) => {
-      const data = await api.recipe.createRecipe(newRecipe);
-      return data;
+    mutationFn: async (data) => {
+      const { recipe, file, userId, nickname } = data;
+      await api.recipe.postRecipe(recipe, file, userId, nickname);
     },
     onSuccess: () => queryClient.invalidateQueries(['recipes']),
     onError: (error) => {
@@ -43,8 +43,8 @@ export const useCreateRecipe = () => {
 export const useUpdateRecipe = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async ({ recipeId, updatedRecipe }) => {
-      const data = await api.recipe.updateRecipe(recipeId, updatedRecipe);
+    mutationFn: async ({ recipe, file }) => {
+      const data = await api.recipe.UpdateRecipe(recipe, file);
       return data;
     },
     onSuccess: () => {
@@ -59,8 +59,8 @@ export const useUpdateRecipe = () => {
 export const useDeleteRecipe = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (recipeId) => {
-      const data = await api.recipe.deleteRecipe(recipeId);
+    mutationFn: async (recipe) => {
+      const data = await api.recipe.DeleteRecipe(recipe);
       return data;
     },
     onSuccess: () => queryClient.invalidateQueries(['recipes']),

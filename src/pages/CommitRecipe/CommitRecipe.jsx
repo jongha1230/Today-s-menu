@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import 'tailwindcss/tailwind.css';
-import api from '../../api/api';
 import { v4 as uuid4 } from 'uuid';
-import useUserStore from '../../store/useUserStore';
 import { useCreateRecipe, useDeleteRecipe, useUpdateRecipe } from '../../components/shared/hooks/useRecipeQueries';
+import useUserStore from '../../store/useUserStore';
 
 const RecipeForm = () => {
   const [imageSrc, setImageSrc] = useState('https://via.placeholder.com/200');
@@ -19,9 +18,7 @@ const RecipeForm = () => {
   const { mutate: updateRecipe } = useUpdateRecipe();
   const { mutate: deleteRecipe } = useDeleteRecipe();
 
-  console.log('test');
-
-  console.log(user.id);
+  console.log('Current user:', user);
 
   useEffect(() => {
     const storedRecipes = JSON.parse(localStorage.getItem('recipes')) || [];
@@ -51,7 +48,12 @@ const RecipeForm = () => {
       content,
       imageSrc //미리보기용 이미지 url 설정
     };
-
+    console.log('Creating recipe with data:', {
+      recipe: newRecipe,
+      file: selectedFile,
+      userId: user.id,
+      nickname: user.nickname
+    });
     let updatedRecipes;
     if (editingIndex !== null) {
       updatedRecipes = submittedRecipes.map((recipe, index) => (index === editingIndex ? newRecipe : recipe));
@@ -65,9 +67,9 @@ const RecipeForm = () => {
     console.log(user.id, user.nickname);
 
     if (editingIndex !== null) {
-      updateRecipe(newRecipe, selectedFile);
+      updateRecipe({ recipe: newRecipe, file: selectedFile });
     } else {
-      createRecipe(newRecipe, selectedFile, user.id, user.nickname);
+      createRecipe({ recipe: newRecipe, file: selectedFile, userId: user.id, nickname: user.nickname });
     }
 
     setTitle('');
@@ -97,7 +99,7 @@ const RecipeForm = () => {
     const updatedRecipes = submittedRecipes.map((recipe, index) => (index === editingIndex ? updatedRecipe : recipe));
     setSubmittedRecipes(updatedRecipes);
     localStorage.setItem('recipes', JSON.stringify(updatedRecipes));
-    updateRecipe(updatedRecipe, selectedFile);
+    updateRecipe({ recipe: updatedRecipe, file: selectedFile });
 
     setTitle('');
     setContent('');
