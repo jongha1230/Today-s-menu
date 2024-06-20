@@ -41,6 +41,20 @@ const RecipeForm = ({ existingRecipe }) => {
   };
 
   const handleSubmit = () => {
+    if (!title.trim() || !content.trim()) {
+      toast.error('제목과 내용을 모두 입력하세요.');
+      return;
+    }
+
+    if (title.length > 30) {
+      toast.error('제목은 최대 30자까지 입력 가능합니다.');
+      return;
+    }
+
+    if (content.length > 60) {
+      toast.error('내용은 최대 60자까지 입력 가능합니다.');
+      return;
+    }
     const newRecipe = {
       id: existingRecipe?.id || uuid4(),
       title,
