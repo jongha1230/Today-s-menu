@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import defaultProfileImage from '../../assets/images/memoticon.png';
 import {
   useCreateComment,
@@ -7,7 +7,7 @@ import {
   useGetComments,
   useUpdateComment
 } from '../../components/shared/hooks/useCommentQueries';
-import { useRecipeDetail } from '../../components/shared/hooks/useRecipeQueries';
+import { useDeleteRecipe, useRecipeDetail } from '../../components/shared/hooks/useRecipeQueries';
 import { getNowTime } from '../../components/shared/utils/getNowDate';
 import useUserStore from '../../store/useUserStore';
 
@@ -19,6 +19,9 @@ function RecipeDetail() {
   const { mutate: createComment } = useCreateComment();
   const { mutate: updateComment } = useUpdateComment();
   const { mutate: deleteComment } = useDeleteComment();
+  const { mutate: deleteRecipe } = useDeleteRecipe();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const [content, setContent] = useState('');
 
@@ -73,6 +76,17 @@ function RecipeDetail() {
     }
   };
 
+  const handleEditRecipe = () => {
+    navigate(`/recipe/${recipeId}/edit`, { state: { from: location.pathname } });
+  };
+
+  const handleDeleteRecipe = () => {
+    if (confirm('정말로 삭제하시겠습니까?')) {
+      deleteRecipe(recipeId);
+      navigate('/', { replace: true });
+    }
+  };
+
   return (
     <div className="flex justify-center items-center min-h-screen ">
       <div className="bg-white  rounded-lg overflow-hidden max-w-4xl w-full">
@@ -81,6 +95,20 @@ function RecipeDetail() {
           <div className="flex justify-between">
             <h6 className="text-sm text-gray-600 mb-2 ml-4 ">by {recipe?.nickname}</h6>
             <h6 className="text-sm text-gray-600 mb-2 ml-4 ">{getNowTime(recipe?.created_at)}</h6>
+          </div>
+          <div className="p-6 flex justify-end">
+            <button
+              className="bg-theme-color hover:bg-default-color text-black font-bold py-2 px-4 rounded mr-2"
+              onClick={handleEditRecipe}
+            >
+              게시글 수정
+            </button>
+            <button
+              className="bg-sub-color hover:bg-default-color text-black font-bold py-2 px-4 rounded"
+              onClick={handleDeleteRecipe}
+            >
+              게시글 삭제
+            </button>
           </div>
 
           <div className="border-b"></div>
@@ -103,7 +131,7 @@ function RecipeDetail() {
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-bold">코멘트</h2>
             <button
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              className="bg-theme-color hover:bg-default-color text-black font-bold py-2 px-4 rounded"
               onClick={handleToggleComment}
               // onClick={handleToggleReview(review.id)}
             >
@@ -161,13 +189,13 @@ function RecipeDetail() {
                     <div className="flex justify-end">
                       <button
                         type="submit"
-                        className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+                        className="bg-theme-color hover:bg-default-color text-black font-bold py-2 px-4 rounded"
                       >
                         저장
                       </button>
                       <button
                         type="button"
-                        className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded ml-2"
+                        className="bg-sub-color hover:bg-default-color text-black font-bold py-2 px-4 rounded ml-2"
                         onClick={() => setEditCommentId(null)}
                       >
                         취소
@@ -194,13 +222,13 @@ function RecipeDetail() {
                     </div>
                     <div>
                       <button
-                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded mr-2"
+                        className="bg-theme-color hover:bg-default-color text-black font-bold py-1 px-2 rounded mr-2"
                         onClick={() => handleUpdateComment(comment)}
                       >
                         수정
                       </button>
                       <button
-                        className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded"
+                        className="bg-sub-color hover:bg-default-color text-black font-bold py-1 px-2 rounded"
                         onClick={() => handleDeleteComment(comment.id, comment.user_id)}
                       >
                         삭제

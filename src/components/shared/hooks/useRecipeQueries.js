@@ -72,8 +72,8 @@ export const useUpdateRecipe = () => {
 export const useDeleteRecipe = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (recipe) => {
-      const data = await api.recipe.DeleteRecipe(recipe);
+    mutationFn: async (recipeId) => {
+      const data = await api.recipe.DeleteRecipe(recipeId);
       return data;
     },
     onSuccess: () => queryClient.invalidateQueries(['recipes']),
