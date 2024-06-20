@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import api from '../../../api/api';
 import useUserStore from '../../../store/useUserStore';
+import logo from '../../../assets/images/logo.png';
 
 const Header = () => {
   const { user, setUser } = useUserStore();
@@ -15,6 +16,7 @@ const Header = () => {
     <div className="bg-theme-color">
       <header className="flex items-center justify-between p-5">
         <Link to="/" className="flex items-center text-3xl sm:text-xl font-extrabold text-black">
+          <img src={logo} alt="logo" className="h-12 mr-3" />
           <span className="bg-white px-4 py-2 rounded-full">오늘 뭐먹지?</span>
         </Link>
 
