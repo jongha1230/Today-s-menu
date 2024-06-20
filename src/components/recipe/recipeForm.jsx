@@ -17,19 +17,6 @@
 
 //   console.log('Current user:', user);
 
-//   const handleImageUpload = (event) => {
-//     const file = event.target.files[0];
-//     if (file) {
-//       setSelectedFile(file);
-
-//       const reader = new FileReader();
-//       reader.onload = (e) => {
-//         setImageSrc(e.target.result);
-//       };
-//       reader.readAsDataURL(file);
-//     }
-//   };
-
 //   const handleSubmit = () => {
 //     const newRecipe = {
 //       id: uuid4(),
