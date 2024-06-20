@@ -1,14 +1,15 @@
 import { createBrowserRouter } from 'react-router-dom';
 import LogInForm from '../components/auth/LogInForm';
-import SignUpForm from '../components/auth/SignUpForm';
-import AuthPage from '../pages/AuthPage';
-import MainPage from '../pages/MainPage';
-import RecipeDetail from '../pages/RecipeDetail';
-import MainLayout from '../styles/MainLayout/MainLayout';
-import MyPage from '../pages/MyPage/MyPage';
 import MyPageForm from '../components/auth/MyPageForm';
 import MyPageModify from '../components/auth/MyPageModify';
-import CommitRecipe from '../pages/CommitRecipe/CommitRecipe';
+import SignUpForm from '../components/auth/SignUpForm';
+import AuthPage from '../pages/AuthPage';
+
+import CommitRecipePage from '../pages/CommitRecipePage';
+import MainPage from '../pages/MainPage';
+import MyPage from '../pages/MyPage/MyPage';
+import RecipeDetail from '../pages/RecipeDetail';
+import MainLayout from '../styles/MainLayout/MainLayout';
 
 const router = createBrowserRouter([
   {
@@ -20,10 +21,14 @@ const router = createBrowserRouter([
         element: <MainPage />
       },
       {
-        path: '/recipes',
+        path: '/recipe/:recipeId',
         element: <RecipeDetail />
       },
-      { path: '/recipe', element: <CommitRecipe /> },
+      { path: '/recipe', element: <CommitRecipePage /> },
+      {
+        path: '/recipe/:recipeId/edit',
+        element: <CommitRecipePage />
+      },
       {
         path: '/',
         element: <MyPage />,

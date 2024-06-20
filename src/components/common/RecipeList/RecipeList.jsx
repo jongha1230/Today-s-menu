@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const RecipeList = ({ recipes }) => {
   //
@@ -10,7 +11,11 @@ const RecipeList = ({ recipes }) => {
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
       {sortedRecipes.length > 0 ? (
         sortedRecipes.map((recipe) => (
-          <div key={recipe.id} className="bg-white w-52 h-74 rounded-lg p-4 border-2 mb-5 m-2">
+          <Link
+            to={`/recipe/${recipe.id}`}
+            key={recipe.id}
+            className="bg-white w-52 h-74 rounded-lg p-4 border-2 mb-5 m-2"
+          >
             <div>
               <img src={recipe.thumbnail} alt={recipe.title} className="object-cover w-full rounded-lg" />
             </div>
@@ -22,7 +27,7 @@ const RecipeList = ({ recipes }) => {
                 {new Date(recipe.created_at).toLocaleDateString()}
               </p>
             </div>
-          </div>
+          </Link>
         ))
       ) : (
         <div className="col-span-full h-[370px] flex items-start justify-center">검색 결과가 없습니다.</div>

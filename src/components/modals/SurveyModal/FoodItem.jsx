@@ -1,7 +1,6 @@
 import foodImage from '../../../assets/images/default-food-image.png';
 
 const FoodItem = ({ food }) => {
-  console.log(food.allergies);
   return (
     <li className="flex border-2 border-black border-solid w-full h-44 text-center items-center gap-20 px-4 py-2.5 rounded-3xl">
       <img src={foodImage} alt={food.name} className="w-24 h-24 object-cover" />
