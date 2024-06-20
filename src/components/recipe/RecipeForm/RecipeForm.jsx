@@ -33,18 +33,10 @@ const RecipeForm = ({ existingRecipe }) => {
 
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
-    if (file) {
-      setSelectedFile(file);
-
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setImageSrc(e.target.result);
-      };
-      reader.readAsDataURL(file);
-    } else {
-      // 파일이 선택되지 않은 경우
-      setImageSrc(existingRecipe?.thumbnail || 'https://via.placeholder.com/200');
-    }
+    previewImage(file, (result) => {
+      setImageSrc(result);
+    });
+    setSelectedFile(file);
   };
 
   const handleSubmit = () => {

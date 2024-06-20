@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import api from '../../api/api';
 import useUserStore from '../../store/useUserStore';
+import { previewImage } from '../shared/utils/previewImage';
 import AuthButton from './AuthButton';
 import AuthInput from './AuthInput';
 
@@ -29,11 +30,9 @@ const MyPageModify = () => {
 
   const onPreviewHandler = (event) => {
     const file = event.target.files[0];
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => {
-      setValues({ ...values, profile_picture_url: reader.result });
-    };
+    previewImage(file, (result) => {
+      setValues({ ...values, profile_picture_url: result });
+    });
   };
 
   const onDeleteHandler = () => {
