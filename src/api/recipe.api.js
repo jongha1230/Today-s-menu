@@ -1,6 +1,32 @@
 import supabase from './supabaseAPI';
 
 class RecipeAPI {
+  // 레시피 목록 불러오기
+  async getRecipes() {
+    try {
+      const { data, error } = await supabase.from('recipes').select('*');
+      if (error) {
+        throw Error('레시피 목록 데이터 가져오기 실패');
+      }
+      return data;
+    } catch (error) {
+      return null;
+    }
+  }
+
+  // 레시피 항목 불러오기
+  async getRecipeById(recipeId) {
+    try {
+      const { data, error } = await supabase.from('recipes').select('*').eq('id', recipeId);
+      if (error) {
+        throw Error('레시피 항목 데이터 가져오기 실패');
+      }
+      return data;
+    } catch (error) {
+      return null;
+    }
+  }
+
   //레시피 추가 메서드
   async postRecipe(recipe, file, userId, nickname) {
     let thumbnailUrl = ''; // 기본적으로 빈 문자열 또는 기본 이미지 URL로 설정

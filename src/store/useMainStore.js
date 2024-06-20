@@ -1,18 +1,16 @@
 import { create } from 'zustand';
 
-const useMainStore = create((set) => ({
-  cards: [],
-  filteredCards: [],
+const useMainStore = create((set, get) => ({
+  recipes: [],
+  filteredRecipes: [],
   searchTerm: '',
-  isModalOpen: false,
-  setCards: (data) => set({ cards: data, filteredCards: data }),
-  setFilteredCards: (data) => set({ filteredCards: data }),
-  setSearchTerm: (term) =>
-    set((state) => {
-      const filtered = state.cards.filter((card) => card.title.toLowerCase().includes(term.toLowerCase()));
-      return { searchTerm: term, filteredCards: filtered };
-    }),
-  handleModalToggle: () => set((state) => ({ isModalOpen: !state.isModalOpen }))
+  setRecipes: (recipes) => set({ recipes, filteredRecipes: recipes }),
+  setFilteredRecipes: (filteredRecipes) => set({ filteredRecipes }),
+  setSearchTerm: (searchTerm) => {
+    const recipes = get().recipes;
+    const filtered = recipes.filter((recipe) => recipe.title.toLowerCase().includes(searchTerm.toLowerCase()));
+    set({ searchTerm, filteredRecipes: filtered });
+  }
 }));
 
 export default useMainStore;

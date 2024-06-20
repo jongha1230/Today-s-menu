@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import AuthInput from './AuthInput';
+import api from '../../api/api';
 import useUserStore from '../../store/useUserStore';
 import AuthButton from './AuthButton';
-import api from '../../api/api';
+import AuthInput from './AuthInput';
 
 const MyPageModify = () => {
   const { user, setUser } = useUserStore();
