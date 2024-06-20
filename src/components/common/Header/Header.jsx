@@ -15,7 +15,7 @@ const Header = () => {
 
   return (
     <div className="bg-theme-color">
-      <header className="flex items-center justify-between p-5">
+      <header className="  flex items-center justify-between p-5">
         <Link to="/" className="flex items-center text-3xl sm:text-xl font-extrabold text-black">
           <img src={photo} alt="logo" className="h-12" />
           <img src={logo55} alt="logo" className="h-6" />

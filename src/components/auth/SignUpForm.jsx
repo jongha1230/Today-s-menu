@@ -81,7 +81,7 @@ const SignUpForm = () => {
           type="password"
           placeholder="비밀번호를 다시 한번 더 입력해주세요."
           name="confirmPw"
-          value={values.nickname}
+          value={confirmPw}
           handler={(e) => {
             setConfirmPw(e.target.value);
           }}

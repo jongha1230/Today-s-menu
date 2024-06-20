@@ -9,7 +9,7 @@ class AuthAPI {
         throw Error(signUpError.message);
       }
 
-      const { data: userData, error: userError } = await supabase.from('users').insert({ id: userId, nickname });
+      const { data: userData, error: userError } = await supabase.from('users').insert({ id: userId, nickname, email });
       if (userError) {
         throw Error(userError.message);
       }
@@ -68,7 +68,7 @@ class AuthAPI {
       console.log(usersData);
       return {
         id: user.id,
-        email: usersData.email,
+        email: user.email,
         nickname: usersData.nickname,
         profile_picture_url: usersData.profile_picture_url
       };
