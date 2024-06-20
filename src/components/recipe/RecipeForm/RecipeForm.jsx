@@ -5,6 +5,7 @@ import 'tailwindcss/tailwind.css';
 import { v4 as uuid4 } from 'uuid';
 import useUserStore from '../../../store/useUserStore';
 import { useCreateRecipe, useUpdateRecipe } from '../../shared/hooks/useRecipeQueries';
+import { previewImage } from '../../shared/utils/previewImage';
 
 const RecipeForm = ({ existingRecipe }) => {
   const [imageSrc, setImageSrc] = useState(existingRecipe?.thumbnail || 'https://via.placeholder.com/200');

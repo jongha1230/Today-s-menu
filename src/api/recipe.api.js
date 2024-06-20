@@ -46,7 +46,7 @@ class RecipeAPI {
     // 파일이 있는 경우에만 이미지 업로드 시도
     if (file) {
       // 스토리지에 이미지 저장
-      const { data: uploadData, error: uploadError } = await supabase.storage
+      const { error: uploadError } = await supabase.storage
         .from('images')
         .upload(`recipeimages/${recipe.id}.${file.name.split('.').pop()}`, file, {
           cacheControl: '3600',
@@ -160,7 +160,7 @@ class RecipeAPI {
       }
 
       // 새로운 파일 업로드
-      const { data: uploadData, error: uploadError } = await supabase.storage
+      const { error: uploadError } = await supabase.storage
         .from('images')
         .upload(`recipeimages/${recipe.id}.${file.name.split('.').pop()}`, file, {
           cacheControl: '3600',

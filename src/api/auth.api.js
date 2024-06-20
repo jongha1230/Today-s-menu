@@ -1,3 +1,4 @@
+import { toast } from 'react-toastify';
 import supabase from './supabaseAPI';
 
 class AuthAPI {
@@ -14,10 +15,9 @@ class AuthAPI {
         throw Error(userError.message);
       }
 
-      console.log('회원가입 성공!');
-
       return { signUpData, userData };
     } catch (error) {
+      toast.error('회원가입 실패');
       throw new Error(`회원가입 실패 : ${error.message}`);
     }
   };
@@ -28,10 +28,10 @@ class AuthAPI {
       if (signInError) {
         throw Error(signInError.message);
       }
-      console.log('로그인 성공!');
       return signInData;
     } catch (error) {
-      throw new Error(`회원가입 실패 : ${error.message}`);
+      toast.error('로그인 실패');
+      throw new Error(`로그인 실패 : ${error.message}`);
     }
   };
 
@@ -41,9 +41,9 @@ class AuthAPI {
       if (signOutError) {
         throw Error(signOutError.message);
       }
-      console.log('로그아웃 성공!');
     } catch (error) {
-      throw new Error(`로그인 실패 : ${error.message}`);
+      toast.error('로그아웃 실패');
+      throw new Error(`로그아웃 실패 : ${error.message}`);
     }
   };
 
