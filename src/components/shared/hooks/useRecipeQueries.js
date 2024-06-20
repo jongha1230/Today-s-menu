@@ -19,7 +19,7 @@ export const useRecipeDetail = (recipeId) => {
     queryKey: ['recipeDetail', recipeId],
     queryFn: async () => {
       const data = await api.recipe.getRecipeById(recipeId);
-      return data;
+      return data[0];
     },
     onSuccess: (data) => queryClient.invalidateQueries(['recipeDetail', recipeId], data),
     enabled: !!recipeId
