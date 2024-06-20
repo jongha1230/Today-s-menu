@@ -4,7 +4,7 @@ class RecipeAPI {
   // 레시피 목록 불러오기
   async getRecipes() {
     try {
-      const { data, error } = await supabase.from('recipes').select('*');
+      const { data, error } = await supabase.from('recipes').select('*,users(nickname)');
       if (error) {
         throw Error('레시피 목록 데이터 가져오기 실패');
       }
@@ -17,7 +17,7 @@ class RecipeAPI {
   // 내가 작성한 레시피 목록 불러오기
   async getMyRecipes(userId) {
     try {
-      const { data, error } = await supabase.from('recipes').select('*').eq('user_id', userId);
+      const { data, error } = await supabase.from('recipes').select('*,users(nickname)').eq('user_id', userId);
       if (error) {
         throw Error('레시피 목록 데이터 가져오기 실패');
       }
@@ -30,7 +30,7 @@ class RecipeAPI {
   // 레시피 항목 불러오기
   async getRecipeById(recipeId) {
     try {
-      const { data, error } = await supabase.from('recipes').select('*').eq('id', recipeId);
+      const { data, error } = await supabase.from('recipes').select('*,users(nickname)').eq('id', recipeId);
       if (error) {
         throw Error('레시피 항목 데이터 가져오기 실패');
       }

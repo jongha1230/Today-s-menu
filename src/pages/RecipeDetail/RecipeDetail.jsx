@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import defaultImage from '../../assets/images/default-food-image.png';
 import defaultProfileImage from '../../assets/images/memoticon.png';
 import {
@@ -22,7 +22,8 @@ function RecipeDetail() {
   const { mutate: deleteComment } = useDeleteComment();
   const { mutate: deleteRecipe } = useDeleteRecipe();
   const navigate = useNavigate();
-  const location = useLocation();
+
+  console.log(comments);
 
   const [content, setContent] = useState('');
 
@@ -78,7 +79,7 @@ function RecipeDetail() {
   };
 
   const handleEditRecipe = () => {
-    navigate(`/recipe/${recipeId}/edit`, { state: { from: location.pathname } });
+    navigate(`/recipe/${recipeId}/edit`);
   };
 
   const handleDeleteRecipe = () => {
@@ -94,7 +95,7 @@ function RecipeDetail() {
         <div className="pb-4">
           <h1 className="text-4xl font-bold mb-4  pt-6">{recipe?.title}</h1>
           <div className="flex justify-between">
-            <h6 className="text-sm text-gray-600 mb-2 ml-4 ">by {recipe?.nickname}</h6>
+            <h6 className="text-sm text-gray-600 mb-2 ml-4 ">by {recipe?.users.nickname}</h6>
             <h6 className="text-sm text-gray-600 mb-2 ml-4 ">{getNowTime(recipe?.created_at)}</h6>
           </div>
           <div className="p-6 flex justify-end">
@@ -180,13 +181,13 @@ function RecipeDetail() {
                         <img
                           style={{ cursor: 'pointer' }}
                           className="w-14 h-14 rounded-full"
-                          src={user?.profile_picture_url ?? defaultProfileImage}
-                          alt={`${comment?.user_name} 프로필 사진`}
+                          src={comment?.users.profile_picture_url ?? defaultProfileImage}
+                          alt={`${comment?.users.nickname} 프로필 사진`}
                         />
                       </div>
                       <div className="flex-1">
                         <h3 className="font-bold" style={{ cursor: 'pointer' }}>
-                          {comment?.user_name}
+                          {comment?.user.nickname}
                         </h3>
                       </div>
                     </div>
@@ -218,13 +219,13 @@ function RecipeDetail() {
                       <img
                         style={{ cursor: 'pointer' }}
                         className="w-14 h-14 rounded-full"
-                        src={user?.profile_picture_url ?? defaultProfileImage}
-                        alt={`${comment?.user_name} 프로필 사진`}
+                        src={comment?.users.profile_picture_url ?? defaultProfileImage}
+                        alt={`${comment?.users.nickname} 프로필 사진`}
                       />
                     </div>
                     <div className="flex-1">
                       <h3 className="font-bold" style={{ cursor: 'pointer' }}>
-                        {comment?.user_name}
+                        {comment?.users.nickname}
                       </h3>
 
                       <p className="text-gray-600 mt-2">{comment?.comment}</p>
