@@ -13,6 +13,19 @@ export const useGetRecipes = () => {
   });
 };
 
+export const useGetMyRecipes = (userId) => {
+  const queryClient = useQueryClient();
+  return useQuery({
+    queryKey: ['myRecipes', userId],
+    queryFn: async () => {
+      const data = await api.recipe.getMyRecipes(userId);
+      return data;
+    },
+    onSuccess: () => queryClient.invalidateQueries(['myRecipes', userId]),
+    enabled: !!userId // 사용자 ID가 있을 때만 쿼리 실행
+  });
+};
+
 export const useRecipeDetail = (recipeId) => {
   const queryClient = useQueryClient();
   return useQuery({
