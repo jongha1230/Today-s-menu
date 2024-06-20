@@ -34,6 +34,11 @@ const MyPageModify = () => {
     };
   };
 
+  const onDeleteHandler = () => {
+    confirm('프로필 사진을 삭제하시겠습니까 ?');
+    setValues({ ...values, profile_picture_url: '' });
+  };
+
   const onSubmitHandler = (event) => {
     event.preventDefault();
     console.log(values);
@@ -46,7 +51,10 @@ const MyPageModify = () => {
       onSubmit={onSubmitHandler}
       className="w-5/12 min-w-max h-full pb-12 px-24 flex flex-col gap-5 items-center border-solid border-4 border-default-color rounded-3xl shadow-md "
     >
-      <div className="relative w-44 h-44 mt-16 mb-8 rounded-full overflow-hidden cursor-pointer">
+      <div
+        onClick={onDeleteHandler}
+        className="relative w-44 h-44 mt-16 mb-8 rounded-full overflow-hidden cursor-pointer hover:scale-105 ease-in duration-300"
+      >
         <img
           src={values.profile_picture_url ?? '/src/assets/images/icons8-사람-100.png'}
           alt=""
