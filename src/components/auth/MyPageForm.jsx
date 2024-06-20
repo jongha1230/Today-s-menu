@@ -3,16 +3,24 @@ import { IoIosMail } from 'react-icons/io';
 import { Link, useNavigate } from 'react-router-dom';
 import defaultProfileImage from '../../assets/images/memoticon.png';
 import useUserStore from '../../store/useUserStore';
+import RecipeList from '../common/RecipeList/RecipeList';
+import { useGetMyRecipes } from '../shared/hooks/useRecipeQueries';
 
 const MyPageForm = () => {
   const { user } = useUserStore();
   const navigate = useNavigate();
+  const { data: myRecipes, isLoading } = useGetMyRecipes(user.id);
+  console.log(myRecipes);
 
   useEffect(() => {
     if (!user) {
       navigate('/');
     }
   }, [user, navigate]);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="w-8/12 h-full p-5 flex flex-col gap-6 justify-center">
@@ -38,8 +46,9 @@ const MyPageForm = () => {
         </div>
       </div>
       <div className="w-full h-full flex flex-col items-center">
-        <div className="w-11/12 p-6 text-2xl border-b border-black">내가 올린 레시피</div>
+        <div className="w-11/12 p-6 mb-5 text-2xl border-b border-black">내가 올린 레시피</div>
         {/* 레시피 리스트 */}
+        <RecipeList recipes={myRecipes} />
       </div>
     </div>
   );
