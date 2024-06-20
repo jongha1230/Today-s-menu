@@ -3,9 +3,11 @@ import api from '../../api/api';
 import useUserStore from '../../store/useUserStore';
 import AuthButton from './AuthButton';
 import AuthInput from './AuthInput';
+import { useNavigate } from 'react-router-dom';
 
 const MyPageModify = () => {
   const { user, setUser } = useUserStore();
+  const navigate = useNavigate();
   const [values, setValues] = useState({
     id: '',
     email: '',
@@ -36,14 +38,15 @@ const MyPageModify = () => {
 
   const onDeleteHandler = () => {
     confirm('프로필 사진을 삭제하시겠습니까 ?');
-    setValues({ ...values, profile_picture_url: '' });
+    setValues({ ...values, profile_picture_url: null });
   };
 
   const onSubmitHandler = (event) => {
     event.preventDefault();
-    console.log(values);
+
     api.auth.UpdateUser(values);
     setUser(values);
+    navigate('/myPage');
   };
 
   return (

@@ -13,7 +13,7 @@ const Header = () => {
 
   return (
     <div className="bg-theme-color">
-      <header className="flex items-center justify-between p-5">
+      <header className="  flex items-center justify-between p-5">
         <Link to="/" className="flex items-center text-3xl sm:text-xl font-extrabold text-black">
           <span className="bg-white px-4 py-2 rounded-full">오늘 뭐먹지?</span>
         </Link>
