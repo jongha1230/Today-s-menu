@@ -6,7 +6,10 @@ class CommentsAPI {
   // 게시글 코멘트 목록 불러오기
   async getComment(recipeId) {
     try {
-      const { data, error } = await supabase.from('comments').select('*').eq('recipe_id', recipeId);
+      const { data, error } = await supabase
+        .from('comments')
+        .select('*, users(nickname, profile_picture_url)')
+        .eq('recipe_id', recipeId);
 
       if (error) {
         throw error;

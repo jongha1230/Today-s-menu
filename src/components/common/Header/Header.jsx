@@ -1,9 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import api from '../../../api/api';
-import useUserStore from '../../../store/useUserStore';
-import photo from '../../../assets/images/photo.png';
 import logo55 from '../../../assets/images/logo55.png';
+import photo from '../../../assets/images/photo.png';
+import useUserStore from '../../../store/useUserStore';
 
 const Header = () => {
   const { user, setUser } = useUserStore();
@@ -11,11 +12,12 @@ const Header = () => {
   const handleLogout = () => {
     api.auth.SignOut(); // 로그아웃 기능 추가
     setUser(null);
+    toast.success('로그아웃 되었습니다.');
   };
 
   return (
-    <div className="bg-theme-color">
-      <header className="  flex items-center justify-between p-5">
+    <div className="fixed top-0 w-full z-50  bg-theme-color">
+      <header className="flex items-center justify-between p-5">
         <Link to="/" className="flex items-center text-3xl sm:text-xl font-extrabold text-black">
           <img src={photo} alt="logo" className="h-12" />
           <img src={logo55} alt="logo" className="h-6" />

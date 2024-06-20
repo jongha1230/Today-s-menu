@@ -1,5 +1,7 @@
 import { useState } from 'react';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import defaultImage from '../../assets/images/default-food-image.png';
 import defaultProfileImage from '../../assets/images/memoticon.png';
 import {
   useCreateComment,
@@ -21,7 +23,6 @@ function RecipeDetail() {
   const { mutate: deleteComment } = useDeleteComment();
   const { mutate: deleteRecipe } = useDeleteRecipe();
   const navigate = useNavigate();
-  const location = useLocation();
 
   const [content, setContent] = useState('');
 
@@ -34,6 +35,7 @@ function RecipeDetail() {
       setShowCommentsForm((state) => !state);
     } else {
       alert('로그인을 해주세요');
+      navigate('/login');
     }
   };
 
@@ -47,6 +49,7 @@ function RecipeDetail() {
     };
     createComment(newComment);
     setShowCommentsForm(false);
+    toast.success('댓글이 등록되었습니다.');
   };
 
   const handleUpdateComment = (comment) => {
@@ -54,7 +57,7 @@ function RecipeDetail() {
       setEditCommentId(comment.id);
       setEditCommentContent(comment.comment);
     } else {
-      alert('본인이 작성한 리뷰만 수정할 수 있습니다.');
+      toast.warn('본인이 작성한 댓글만 수정할 수 있습니다.');
     }
   };
 
@@ -64,26 +67,29 @@ function RecipeDetail() {
     updateComment({ commentId: comment.id, content: editCommentContent });
     setEditCommentId(null);
     setEditCommentContent('');
+    toast.success('댓글이 수정되었습니다.');
   };
 
   const handleDeleteComment = (commentId, commentUserId) => {
     if (commentUserId === user?.id) {
       if (confirm('삭제하시겠습니까?')) {
         deleteComment(commentId);
+        toast.success('댓글이 삭제되었습니다.');
       }
     } else {
-      alert('본인이 작성한 리뷰만 삭제할 수 있습니다.');
+      toast.warn('본인이 작성한 댓글만 삭제할 수 있습니다.');
     }
   };
 
   const handleEditRecipe = () => {
-    navigate(`/recipe/${recipeId}/edit`, { state: { from: location.pathname } });
+    navigate(`/recipe/${recipeId}/edit`);
   };
 
   const handleDeleteRecipe = () => {
     if (confirm('정말로 삭제하시겠습니까?')) {
       deleteRecipe(recipeId);
       navigate('/', { replace: true });
+      toast.success('레시피가 삭제되었습니다.');
     }
   };
 
@@ -93,22 +99,26 @@ function RecipeDetail() {
         <div className="pb-4">
           <h1 className="text-4xl font-bold mb-4  pt-6">{recipe?.title}</h1>
           <div className="flex justify-between">
-            <h6 className="text-sm text-gray-600 mb-2 ml-4 ">by {recipe?.nickname}</h6>
+            <h6 className="text-sm text-gray-600 mb-2 ml-4 ">by {recipe?.users.nickname}</h6>
             <h6 className="text-sm text-gray-600 mb-2 ml-4 ">{getNowTime(recipe?.created_at)}</h6>
           </div>
           <div className="p-6 flex justify-end">
-            <button
-              className="bg-theme-color hover:bg-default-color text-black font-bold py-2 px-4 rounded mr-2"
-              onClick={handleEditRecipe}
-            >
-              게시글 수정
-            </button>
-            <button
-              className="bg-sub-color hover:bg-default-color text-black font-bold py-2 px-4 rounded"
-              onClick={handleDeleteRecipe}
-            >
-              게시글 삭제
-            </button>
+            {user && user.id === recipe?.user_id && (
+              <>
+                <button
+                  className="bg-theme-color hover:bg-default-color text-black font-bold py-2 px-4 rounded mr-2"
+                  onClick={handleEditRecipe}
+                >
+                  게시글 수정
+                </button>
+                <button
+                  className="bg-sub-color hover:bg-default-color text-black font-bold py-2 px-4 rounded"
+                  onClick={handleDeleteRecipe}
+                >
+                  게시글 삭제
+                </button>
+              </>
+            )}
           </div>
 
           <div className="border-b"></div>
@@ -117,7 +127,11 @@ function RecipeDetail() {
 
         <div className="md:flex">
           <div className="md:w-1/2">
-            <img className="h-64 w-full object-cover" src={recipe?.thumbnail} alt={`$.{음식이미지} 요리 사진`} />
+            <img
+              className="h-64 w-full object-cover"
+              src={recipe?.thumbnail || defaultImage}
+              alt={`$.{음식이미지} 요리 사진`}
+            />
           </div>
           <div className="p-6 w-full md:w-[470px] h-auto md:h-[256px] overflow-y-auto">
             <p className="text-lg font-bold mb-2">{recipe?.content}</p>
@@ -151,7 +165,7 @@ function RecipeDetail() {
               <div className="flex justify-end">
                 <button
                   type="submit"
-                  className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+                  className="bg-theme-color hover:bg-default-color text-black font-bold py-2 px-4 rounded"
                 >
                   제출
                 </button>
@@ -171,13 +185,13 @@ function RecipeDetail() {
                         <img
                           style={{ cursor: 'pointer' }}
                           className="w-14 h-14 rounded-full"
-                          src={user?.profile_picture_url ?? defaultProfileImage}
-                          alt={`${comment?.user_name} 프로필 사진`}
+                          src={comment?.users.profile_picture_url ?? defaultProfileImage}
+                          alt={`${comment?.users.nickname} 프로필 사진`}
                         />
                       </div>
                       <div className="flex-1">
                         <h3 className="font-bold" style={{ cursor: 'pointer' }}>
-                          {comment?.user_name}
+                          {comment?.users.nickname}
                         </h3>
                       </div>
                     </div>
@@ -209,13 +223,13 @@ function RecipeDetail() {
                       <img
                         style={{ cursor: 'pointer' }}
                         className="w-14 h-14 rounded-full"
-                        src={user?.profile_picture_url ?? defaultProfileImage}
-                        alt={`${comment?.user_name} 프로필 사진`}
+                        src={comment?.users.profile_picture_url ?? defaultProfileImage}
+                        alt={`${comment?.users.nickname} 프로필 사진`}
                       />
                     </div>
                     <div className="flex-1">
                       <h3 className="font-bold" style={{ cursor: 'pointer' }}>
-                        {comment?.user_name}
+                        {comment?.users.nickname}
                       </h3>
 
                       <p className="text-gray-600 mt-2">{comment?.comment}</p>

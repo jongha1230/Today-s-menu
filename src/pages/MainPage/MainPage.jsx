@@ -4,9 +4,9 @@ import { LuPointer } from 'react-icons/lu';
 import { Link } from 'react-router-dom';
 
 import MainImage from '../../assets/images/MainImage.jpg';
-import SurveyModal from '../../components/modals/SurveyModal/SurveyModal';
 
 import RecipeList from '../../components/common/RecipeList/RecipeList';
+import SurveyModal from '../../components/modals/SurveyModal';
 import { useGetRecipes } from '../../components/shared/hooks/useRecipeQueries';
 import { getCurrentTimeOfDay } from '../../components/shared/utils/getCurrentTimeOfDay';
 import useMainStore from '../../store/useMainStore';
