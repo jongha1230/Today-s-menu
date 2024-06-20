@@ -17,7 +17,7 @@ const MyPageModify = () => {
     setValues({
       ...user
     });
-  }, []);
+  }, [user]);
 
   const onChangeHandler = (event) => {
     const { name, value } = event.target;
@@ -63,7 +63,8 @@ const MyPageModify = () => {
       <div className="w-full mb-8 flex flex-col gap-5">
         <div className="w-3/12 min-12 h-auto text-xl pl-2"> Name ✍🏻</div>
         <AuthInput
-          placeholder="닉네임"
+          type="text"
+          placeholder="수정할 닉네임을 입력해주세요."
           name="nickname"
           value={values.nickname}
           handler={onChangeHandler}

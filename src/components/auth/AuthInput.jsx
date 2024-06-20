@@ -1,9 +1,9 @@
 import React from 'react';
 
-const AuthInput = ({ placeholder, name, value, handler, required }) => {
+const AuthInput = ({ type, placeholder, name, value, handler, required }) => {
   return (
     <input
-      type="text"
+      type={type}
       placeholder={placeholder}
       name={name}
       value={value}

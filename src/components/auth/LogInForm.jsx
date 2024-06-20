@@ -2,9 +2,11 @@ import { Link, useNavigate } from 'react-router-dom';
 import api from '../../api/api';
 import AuthButton from './AuthButton';
 import useUserStore from '../../store/useUserStore';
+import { useState } from 'react';
+import AuthInput from './AuthInput';
 
 const LogInForm = () => {
-  const { user, setUser } = useUserStore();
+  const { setUser } = useUserStore();
   const [logIn, setLogIn] = useState({ email: '', password: '' });
   const navigate = useNavigate();
 
@@ -36,35 +38,29 @@ const LogInForm = () => {
     navigate('/');
   };
 
-  const InputStyle = 'w-full p-1 outline outline-offset-2 outline-gray-400 rounded-md';
   return (
     <>
       <form onSubmit={onSubmitHandler} className="w-96 p-10 flex flex-col gap-6 place-items-center">
         <div className="text-3xl mb-5">Log In</div>
-        <input
+        <AuthInput
           type="text"
-          placeholder="아이디를 입력해주세요."
+          placeholder="이메일을 입력해주세요."
           name="email"
           value={logIn.email}
-          onChange={onChangeHandler}
-          className={InputStyle}
-          required
+          handler={onChangeHandler}
+          required={true}
         />
-        <input
+        <AuthInput
           type="password"
           placeholder="비밀번호를 입력해주세요."
           name="password"
           value={logIn.password}
-          onChange={onChangeHandler}
-          className={InputStyle}
-          required
+          handler={onChangeHandler}
+          required={true}
         />
         <AuthButton>로그인</AuthButton>
-        <Link
-          to={'/signUp'}
-          className="w-8/12 p-2 outline outline-1 outline-gray-400 rounded-xl text-center bg-default-color hover:scale-110 ease-in duration-300 cursor-pointer shadow-md shadow-gray-300"
-        >
-          회원가입
+        <Link to={'/signUp'} className="ml-56 text-sm font-normal hover:underline">
+          {`회원가입 >`}
         </Link>
       </form>
     </>

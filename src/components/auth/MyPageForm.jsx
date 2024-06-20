@@ -4,7 +4,7 @@ import { IoIosMail } from 'react-icons/io';
 import { Link } from 'react-router-dom';
 
 const MyPageForm = () => {
-  const { user, setUser } = useUserStore();
+  const { user } = useUserStore();
   return (
     <div className="w-8/12 h-full p-5 flex flex-col gap-6 justify-center">
       <div
