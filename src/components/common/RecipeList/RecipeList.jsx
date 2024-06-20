@@ -26,7 +26,7 @@ const RecipeList = ({ recipes }) => {
             </div>
             <div className="p-4">
               <hr className="border-gray-300 mb-2" />
-              <h3 className="text-lg font-bold mb-2">{recipe.title}</h3>
+              <h3 className="text-lg font-bold mb-2 truncate-2-lines">{recipe.title}</h3>
               <p className="text-gray-600 mb-1 text-sm justify-between=">{recipe.users.nickname}</p>
               <p className="text-gray-600 mb-1 text-sm justify-between=">
                 {new Date(recipe.created_at).toLocaleDateString()}
