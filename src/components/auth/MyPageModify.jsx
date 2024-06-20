@@ -4,9 +4,11 @@ import useUserStore from '../../store/useUserStore';
 import AuthButton from './AuthButton';
 import AuthInput from './AuthInput';
 import { previewImage } from '../shared/utils/previewImage';
+import { useNavigate } from 'react-router-dom';
 
 const MyPageModify = () => {
   const { user, setUser } = useUserStore();
+  const navigate = useNavigate();
   const [values, setValues] = useState({
     id: '',
     email: '',
@@ -33,11 +35,17 @@ const MyPageModify = () => {
     });
   };
 
+  const onDeleteHandler = () => {
+    confirm('프로필 사진을 삭제하시겠습니까 ?');
+    setValues({ ...values, profile_picture_url: null });
+  };
+
   const onSubmitHandler = (event) => {
     event.preventDefault();
-    console.log(values);
+
     api.auth.UpdateUser(values);
     setUser(values);
+    navigate('/myPage');
   };
 
   return (
@@ -45,7 +53,10 @@ const MyPageModify = () => {
       onSubmit={onSubmitHandler}
       className="w-5/12 min-w-max h-full pb-12 px-24 flex flex-col gap-5 items-center border-solid border-4 border-default-color rounded-3xl shadow-md "
     >
-      <div className="relative w-44 h-44 mt-16 mb-8 rounded-full overflow-hidden cursor-pointer">
+      <div
+        onClick={onDeleteHandler}
+        className="relative w-44 h-44 mt-16 mb-8 rounded-full overflow-hidden cursor-pointer hover:scale-105 ease-in duration-300"
+      >
         <img
           src={values.profile_picture_url ?? '/src/assets/images/icons8-사람-100.png'}
           alt=""
@@ -62,7 +73,8 @@ const MyPageModify = () => {
       <div className="w-full mb-8 flex flex-col gap-5">
         <div className="w-3/12 min-12 h-auto text-xl pl-2"> Name ✍🏻</div>
         <AuthInput
-          placeholder="닉네임"
+          type="text"
+          placeholder="수정할 닉네임을 입력해주세요."
           name="nickname"
           value={values.nickname}
           handler={onChangeHandler}

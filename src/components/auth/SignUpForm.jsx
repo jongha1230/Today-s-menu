@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import api from '../../api/api';
 import AuthButton from './AuthButton';
+import AuthInput from './AuthInput';
 
 const SignUpForm = () => {
   const [values, setValues] = useState({ email: '', password: '', nickname: '' });
@@ -48,49 +49,48 @@ const SignUpForm = () => {
     navigate('/login');
   };
 
-  const InputStyle = 'w-full p-1 outline outline-offset-2 outline-gray-400 rounded-md';
   return (
     <>
       <form onSubmit={onSubmitHandler} className="w-96 p-10 flex flex-col gap-6 place-items-center">
         <div className="text-3xl mb-5">Sign Up</div>
-        <input
+        <AuthInput
           type="text"
           placeholder="닉네임을 입력해주세요."
           name="nickname"
           value={values.nickname}
-          onChange={onChangeHandler}
-          className={InputStyle}
-          required
+          handler={onChangeHandler}
+          required={true}
         />
-        <input
+        <AuthInput
           type="text"
           placeholder="아이디를 입력해주세요."
           name="email"
           value={values.email}
-          onChange={onChangeHandler}
-          className={InputStyle}
-          required
+          handler={onChangeHandler}
+          required={true}
         />
-        <input
+        <AuthInput
           type="password"
           placeholder="비밀번호를 입력해주세요."
           name="password"
           value={values.password}
-          onChange={onChangeHandler}
-          className={InputStyle}
-          required
+          handler={onChangeHandler}
+          required={true}
         />
-        <input
+        <AuthInput
           type="password"
           placeholder="비밀번호를 다시 한번 더 입력해주세요."
+          name="confirmPw"
           value={confirmPw}
-          onChange={(e) => {
+          handler={(e) => {
             setConfirmPw(e.target.value);
           }}
-          className={InputStyle}
-          required
+          required={true}
         />
         <AuthButton>회원가입하기</AuthButton>
+        <Link to={'/logIn'} className="ml-56 text-sm font-normal hover:underline">
+          {`로그인 >`}
+        </Link>
       </form>
     </>
   );
