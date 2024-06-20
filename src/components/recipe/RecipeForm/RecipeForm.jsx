@@ -5,7 +5,7 @@ import { v4 as uuid4 } from 'uuid';
 import useUserStore from '../../../store/useUserStore';
 import { useCreateRecipe, useUpdateRecipe } from '../../shared/hooks/useRecipeQueries';
 
-const RecipeForm = ({ existingRecipe, onSubmitRecipe }) => {
+const RecipeForm = ({ existingRecipe }) => {
   const [imageSrc, setImageSrc] = useState(existingRecipe?.thumbnail || 'https://via.placeholder.com/200');
   const [selectedFile, setSelectedFile] = useState(null);
   const [title, setTitle] = useState('');
@@ -23,10 +23,10 @@ const RecipeForm = ({ existingRecipe, onSubmitRecipe }) => {
     if (existingRecipe) {
       setInitialTitle(existingRecipe.title);
       setInitialContent(existingRecipe.content);
-      setInitialImageSrc(existingRecipe.thumbnail);
+      setInitialImageSrc(existingRecipe.thumbnail || 'https://via.placeholder.com/200');
       setTitle(existingRecipe.title);
       setContent(existingRecipe.content);
-      setImageSrc(existingRecipe.thumbnail);
+      setImageSrc(existingRecipe?.thumbnail || 'https://via.placeholder.com/200');
     }
   }, [existingRecipe]);
 
@@ -40,6 +40,9 @@ const RecipeForm = ({ existingRecipe, onSubmitRecipe }) => {
         setImageSrc(e.target.result);
       };
       reader.readAsDataURL(file);
+    } else {
+      // 파일이 선택되지 않은 경우
+      setImageSrc(existingRecipe?.thumbnail || 'https://via.placeholder.com/200');
     }
   };
 
@@ -57,12 +60,11 @@ const RecipeForm = ({ existingRecipe, onSubmitRecipe }) => {
       createRecipe({ recipe: newRecipe, file: selectedFile, userId: user.id, nickname: user.nickname });
     }
 
-    onSubmitRecipe(newRecipe);
-
     setTitle('');
     setContent('');
     setImageSrc('https://via.placeholder.com/200');
     setSelectedFile(null);
+    navigate('/');
   };
 
   const handleCancelEdit = () => {

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import defaultImage from '../../assets/images/default-food-image.png';
 import defaultProfileImage from '../../assets/images/memoticon.png';
 import {
   useCreateComment,
@@ -97,18 +98,22 @@ function RecipeDetail() {
             <h6 className="text-sm text-gray-600 mb-2 ml-4 ">{getNowTime(recipe?.created_at)}</h6>
           </div>
           <div className="p-6 flex justify-end">
-            <button
-              className="bg-theme-color hover:bg-default-color text-black font-bold py-2 px-4 rounded mr-2"
-              onClick={handleEditRecipe}
-            >
-              게시글 수정
-            </button>
-            <button
-              className="bg-sub-color hover:bg-default-color text-black font-bold py-2 px-4 rounded"
-              onClick={handleDeleteRecipe}
-            >
-              게시글 삭제
-            </button>
+            {user && user.id === recipe?.user_id && (
+              <>
+                <button
+                  className="bg-theme-color hover:bg-default-color text-black font-bold py-2 px-4 rounded mr-2"
+                  onClick={handleEditRecipe}
+                >
+                  게시글 수정
+                </button>
+                <button
+                  className="bg-sub-color hover:bg-default-color text-black font-bold py-2 px-4 rounded"
+                  onClick={handleDeleteRecipe}
+                >
+                  게시글 삭제
+                </button>
+              </>
+            )}
           </div>
 
           <div className="border-b"></div>
@@ -117,7 +122,11 @@ function RecipeDetail() {
 
         <div className="md:flex">
           <div className="md:w-1/2">
-            <img className="h-64 w-full object-cover" src={recipe?.thumbnail} alt={`$.{음식이미지} 요리 사진`} />
+            <img
+              className="h-64 w-full object-cover"
+              src={recipe?.thumbnail || defaultImage}
+              alt={`$.{음식이미지} 요리 사진`}
+            />
           </div>
           <div className="p-6 w-full md:w-[470px] h-auto md:h-[256px] overflow-y-auto">
             <p className="text-lg font-bold mb-2">{recipe?.content}</p>

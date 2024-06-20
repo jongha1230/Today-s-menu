@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import defaultImage from '../../../assets/images/default-food-image.png';
 
 const RecipeList = ({ recipes }) => {
   //
@@ -17,7 +18,11 @@ const RecipeList = ({ recipes }) => {
             className="bg-white w-52 h-74 rounded-lg p-4 border-2 mb-5 m-2"
           >
             <div>
-              <img src={recipe.thumbnail} alt={recipe.title} className="object-cover w-full rounded-lg" />
+              <img
+                src={recipe.thumbnail || defaultImage}
+                alt={recipe.title}
+                className="object-cover w-full rounded-lg"
+              />
             </div>
             <div className="p-4">
               <hr className="border-gray-300 mb-2" />

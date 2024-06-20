@@ -9,8 +9,7 @@ import { useGetMyRecipes } from '../shared/hooks/useRecipeQueries';
 const MyPageForm = () => {
   const { user } = useUserStore();
   const navigate = useNavigate();
-  const { data: myRecipes, isLoading } = useGetMyRecipes(user.id);
-  console.log(myRecipes);
+  const { data: myRecipes, isLoading } = useGetMyRecipes(user?.id);
 
   useEffect(() => {
     if (!user) {
@@ -18,8 +17,14 @@ const MyPageForm = () => {
     }
   }, [user, navigate]);
 
+  // 로딩 중일 때 처리
   if (isLoading) {
     return <div>Loading...</div>;
+  }
+
+  // user가 없거나 myRecipes가 undefined일 때 처리
+  if (!user || !myRecipes) {
+    return null; // 또는 리디렉션이 되기 전까지 빈 화면 유지
   }
 
   return (

@@ -94,33 +94,49 @@ class RecipeAPI {
       console.log('Recipe inserted successfully:', data);
     }
   }
-
   // 레시피 삭제 메서드
-  async DeleteRecipe(recipe) {
-    // 레시피 썸네일 url 선택
-    const { data: thumbnailData } = await supabase.from('recipes').select('thumbnail').eq('id', recipe);
-    // 레시피 테이블 삭제
-    const { data: recipeDeleteData, error: recipeDeleteError } = await supabase
-      .from('recipes')
-      .delete()
-      .eq('id', recipe);
+  async DeleteRecipe(recipeId) {
+    try {
+      // 레시피 썸네일 데이터 가져오기
+      const { data: thumbnailData, error: thumbnailError } = await supabase
+        .from('recipes')
+        .select('thumbnail')
+        .eq('id', recipeId)
+        .single();
 
-    if (recipeDeleteError) {
-      console.error('Error deleting recipe:', recipeDeleteError);
-      return;
-    }
-    if (thumbnailData) {
-      //스토리지 이미지 삭제
-      const { data: imageDeleteData, error: imageDeleteError } = await supabase.storage
-        .from('images')
-        .remove(`recipeimages/${recipe.id}.${thumbnailData[0].thumbnail.split('.').pop()}`);
-
-      if (imageDeleteError) {
-        console.error('Error deleting image:', imageDeleteError);
-        return;
+      if (thumbnailError) {
+        throw new Error('레시피 썸네일 데이터 가져오기 실패');
       }
 
-      console.log('Recipe and image deleted successfully:', recipeDeleteData);
+      // 레시피 테이블에서 삭제
+      const { data: recipeDeleteData, error: recipeDeleteError } = await supabase
+        .from('recipes')
+        .delete()
+        .eq('id', recipeId);
+
+      if (recipeDeleteError) {
+        throw new Error('레시피 삭제 실패');
+      }
+
+      if (thumbnailData && thumbnailData.thumbnail) {
+        // 이미지 파일 이름에서 확장자 추출
+        const extension = thumbnailData.thumbnail.split('.').pop();
+
+        // 스토리지에서 이미지 삭제
+        const { error: imageDeleteError } = await supabase.storage
+          .from('images')
+          .remove(`recipeimages/${recipeId}.${extension}`);
+
+        if (imageDeleteError) {
+          throw new Error('이미지 삭제 실패');
+        }
+
+        console.log('Recipe and image deleted successfully:', recipeDeleteData);
+      } else {
+        console.log('Recipe deleted successfully:', recipeDeleteData);
+      }
+    } catch (error) {
+      console.error('Error deleting recipe:', error);
     }
   }
 
