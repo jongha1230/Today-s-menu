@@ -2,9 +2,10 @@ import { Link, useNavigate } from 'react-router-dom';
 import api from '../../api/api';
 import AuthButton from './AuthButton';
 import useUserStore from '../../store/useUserStore';
+import { useState } from 'react';
 
 const LogInForm = () => {
-  const { user, setUser } = useUserStore();
+  const { setUser } = useUserStore();
   const [logIn, setLogIn] = useState({ email: '', password: '' });
   const navigate = useNavigate();
 
