@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import api from '../../api/api';
 import useUserStore from '../../store/useUserStore';
+import { previewImage } from '../shared/utils/previewImage';
 import AuthButton from './AuthButton';
 import AuthInput from './AuthInput';
-import { previewImage } from '../shared/utils/previewImage';
-import { useNavigate } from 'react-router-dom';
 
 const MyPageModify = () => {
   const { user, setUser } = useUserStore();
@@ -25,7 +26,6 @@ const MyPageModify = () => {
   const onChangeHandler = (event) => {
     const { name, value } = event.target;
     setValues({ ...values, [name]: value });
-    console.log(value);
   };
 
   const onPreviewHandler = (event) => {
@@ -36,8 +36,10 @@ const MyPageModify = () => {
   };
 
   const onDeleteHandler = () => {
-    confirm('프로필 사진을 삭제하시겠습니까 ?');
-    setValues({ ...values, profile_picture_url: null });
+    if (confirm('프로필 사진을 삭제하시겠습니까 ?')) {
+      setValues({ ...values, profile_picture_url: null });
+      toast.success('프로필 사진이 삭제되었습니다.');
+    }
   };
 
   const onSubmitHandler = (event) => {
@@ -46,6 +48,7 @@ const MyPageModify = () => {
     api.auth.UpdateUser(values);
     setUser(values);
     navigate('/myPage');
+    toast.success('프로필이 수정되었습니다.');
   };
 
   return (

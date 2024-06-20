@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import 'tailwindcss/tailwind.css';
 import { v4 as uuid4 } from 'uuid';
 import useUserStore from '../../../store/useUserStore';
 import { useCreateRecipe, useUpdateRecipe } from '../../shared/hooks/useRecipeQueries';
 import { previewImage } from '../../shared/utils/previewImage';
 
-const RecipeForm = ({ existingRecipe, onSubmitRecipe }) => {
+const RecipeForm = ({ existingRecipe }) => {
   const [imageSrc, setImageSrc] = useState(existingRecipe?.thumbnail || 'https://via.placeholder.com/200');
   const [selectedFile, setSelectedFile] = useState(null);
   const [title, setTitle] = useState('');
@@ -24,10 +25,10 @@ const RecipeForm = ({ existingRecipe, onSubmitRecipe }) => {
     if (existingRecipe) {
       setInitialTitle(existingRecipe.title);
       setInitialContent(existingRecipe.content);
-      setInitialImageSrc(existingRecipe.thumbnail);
+      setInitialImageSrc(existingRecipe.thumbnail || 'https://via.placeholder.com/200');
       setTitle(existingRecipe.title);
       setContent(existingRecipe.content);
-      setImageSrc(existingRecipe.thumbnail);
+      setImageSrc(existingRecipe?.thumbnail || 'https://via.placeholder.com/200');
     }
   }, [existingRecipe]);
 
@@ -49,16 +50,17 @@ const RecipeForm = ({ existingRecipe, onSubmitRecipe }) => {
 
     if (existingRecipe) {
       updateRecipe({ recipe: newRecipe, file: selectedFile });
+      toast.success('레시피가 수정 되었습니다.');
     } else {
       createRecipe({ recipe: newRecipe, file: selectedFile, userId: user.id, nickname: user.nickname });
+      toast.success('레시피가 등록 되었습니다.');
     }
-
-    onSubmitRecipe(newRecipe);
 
     setTitle('');
     setContent('');
     setImageSrc('https://via.placeholder.com/200');
     setSelectedFile(null);
+    navigate('/');
   };
 
   const handleCancelEdit = () => {
