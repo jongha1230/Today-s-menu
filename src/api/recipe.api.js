@@ -14,6 +14,19 @@ class RecipeAPI {
     }
   }
 
+  // 내가 작성한 레시피 목록 불러오기
+  async getMyRecipes(userId) {
+    try {
+      const { data, error } = await supabase.from('recipes').select('*').eq('user_id', userId);
+      if (error) {
+        throw Error('레시피 목록 데이터 가져오기 실패');
+      }
+      return data;
+    } catch (error) {
+      return null;
+    }
+  }
+
   // 레시피 항목 불러오기
   async getRecipeById(recipeId) {
     try {
