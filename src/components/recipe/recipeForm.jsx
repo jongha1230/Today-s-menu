@@ -3,6 +3,7 @@ import 'tailwindcss/tailwind.css';
 import { v4 as uuid4 } from 'uuid';
 import { useCreateRecipe, useDeleteRecipe, useUpdateRecipe } from '../../components/shared/hooks/useRecipeQueries';
 import useUserStore from '../../store/useUserStore';
+import { previewImage } from '../shared/utils/previewImage';
 
 const RecipeForm = () => {
   const [imageSrc, setImageSrc] = useState('https://via.placeholder.com/200');
@@ -28,16 +29,10 @@ const RecipeForm = () => {
   //이미지 미리보기, 업로드
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
-    if (file) {
-      setSelectedFile(file);
-
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setImageSrc(e.target.result);
-      };
-      console.log(file);
-      reader.readAsDataURL(file);
-    }
+    previewImage(file, (result) => {
+      setImageSrc(result);
+    });
+    setSelectedFile(file);
   };
 
   //레시피 등록, 수정완료
@@ -137,6 +132,7 @@ const RecipeForm = () => {
           className="w-full text-2xl p-2 border border-gray-300 rounded-lg"
         />
       </div>
+
       <div className="flex justify-center items-start mb-5">
         <div className="mr-5">
           <label
@@ -147,6 +143,7 @@ const RecipeForm = () => {
           </label>
           <input type="file" id="imageUpload" accept="image/*" className="hidden" onChange={handleImageUpload} />
         </div>
+
         <div className="flex-grow">
           <textarea
             value={content}
@@ -156,6 +153,7 @@ const RecipeForm = () => {
           />
         </div>
       </div>
+
       <div className="flex justify-end mt-5">
         <button
           className="bg-blue-500 text-white px-4 py-2 rounded-lg mr-2"
@@ -173,6 +171,7 @@ const RecipeForm = () => {
           취소
         </button>
       </div>
+
       {submittedRecipes.length > 0 && (
         <div className="mt-10">
           {submittedRecipes.map((recipe, index) => (

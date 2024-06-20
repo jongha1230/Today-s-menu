@@ -3,6 +3,7 @@ import api from '../../api/api';
 import useUserStore from '../../store/useUserStore';
 import AuthButton from './AuthButton';
 import AuthInput from './AuthInput';
+import { previewImage } from '../shared/utils/previewImage';
 
 const MyPageModify = () => {
   const { user, setUser } = useUserStore();
@@ -27,11 +28,9 @@ const MyPageModify = () => {
 
   const onPreviewHandler = (event) => {
     const file = event.target.files[0];
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => {
-      setValues({ ...values, profile_picture_url: reader.result });
-    };
+    previewImage(file, (result) => {
+      setValues({ ...values, profile_picture_url: result });
+    });
   };
 
   const onSubmitHandler = (event) => {

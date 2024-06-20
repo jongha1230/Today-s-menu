@@ -4,11 +4,13 @@ import MyPageForm from '../components/auth/MyPageForm';
 import MyPageModify from '../components/auth/MyPageModify';
 import SignUpForm from '../components/auth/SignUpForm';
 import AuthPage from '../pages/AuthPage';
-import CommitRecipe from '../pages/CommitRecipe/CommitRecipe';
+import CommitRecipe from '../pages/RecipePage/RecipePage';
 import MainPage from '../pages/MainPage';
 import MyPage from '../pages/MyPage/MyPage';
 import RecipeDetail from '../pages/RecipeDetail';
 import MainLayout from '../styles/MainLayout/MainLayout';
+import RecipePage from '../pages/RecipePage/RecipePage';
+import RecipeForm from '../components/recipe/recipeForm';
 
 const router = createBrowserRouter([
   {
@@ -23,7 +25,7 @@ const router = createBrowserRouter([
         path: '/recipe/:recipeId',
         element: <RecipeDetail />
       },
-      { path: '/recipe', element: <CommitRecipe /> },
+      { path: '/', element: <RecipePage />, children: [{ path: '/recipe', element: <RecipeForm /> }] },
       {
         path: '/',
         element: <MyPage />,
