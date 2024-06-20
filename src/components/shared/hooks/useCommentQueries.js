@@ -33,9 +33,8 @@ export const useUpdateComment = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async ({ commentId, content }) => {
-      console.log('ddd333', commentId, content);
       const data = await api.comment.editComment(commentId, content);
-      console.log('ddd', data);
+
       return data;
     },
     onSuccess: () => {

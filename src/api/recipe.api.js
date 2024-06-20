@@ -70,14 +70,6 @@ class RecipeAPI {
 
       thumbnailUrl = reloadData.publicUrl;
     }
-    console.log('Inserting recipe with data:', {
-      id: recipe.id,
-      title: recipe.title,
-      user_id: userId,
-      nickname: nickname,
-      content: recipe.content,
-      thumbnail: thumbnailUrl
-    });
     // 레시피 데이터베이스에 추가
     const { data, error } = await supabase.from('recipes').insert({
       id: recipe.id,
@@ -142,7 +134,6 @@ class RecipeAPI {
 
   // 업데이트 메서드
   async UpdateRecipe(recipe, file) {
-    console.log(recipe);
     const { data: existingRecipe, error: existingRecipeError } = await supabase
       .from('recipes')
       .select('thumbnail')

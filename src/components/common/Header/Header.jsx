@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import api from '../../../api/api';
 import logo55 from '../../../assets/images/logo55.png';
 import photo from '../../../assets/images/photo.png';
@@ -11,6 +12,7 @@ const Header = () => {
   const handleLogout = () => {
     api.auth.SignOut(); // 로그아웃 기능 추가
     setUser(null);
+    toast.success('로그아웃 되었습니다.');
   };
 
   return (

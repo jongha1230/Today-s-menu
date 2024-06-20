@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import api from '../../api/api';
 import useUserStore from '../../store/useUserStore';
-import AuthInput from './AuthInput';
 import AuthButton from './AuthButton';
+import AuthInput from './AuthInput';
 
 const LogInForm = () => {
   const { setUser } = useUserStore();
@@ -19,11 +20,11 @@ const LogInForm = () => {
     event.preventDefault();
 
     if (!logIn.email.trim()) {
-      alert('이메일을 입력해주세요 !');
+      toast.error('이메일을 입력해주세요 !');
       return;
     }
     if (!logIn.password.trim()) {
-      alert('비밀번호를 입력해주세요 !');
+      toast.error('비밀번호를 입력해주세요 !');
       return;
     }
 
@@ -34,7 +35,7 @@ const LogInForm = () => {
     setUser(userInfo);
 
     setLogIn({ email: '', password: '' });
-    alert('로그인 되었습니다!');
+    toast.success('로그인 되었습니다!');
     navigate('/');
   };
 

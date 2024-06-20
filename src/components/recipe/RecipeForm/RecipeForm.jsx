@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import 'tailwindcss/tailwind.css';
 import { v4 as uuid4 } from 'uuid';
 import useUserStore from '../../../store/useUserStore';
@@ -56,8 +57,10 @@ const RecipeForm = ({ existingRecipe }) => {
 
     if (existingRecipe) {
       updateRecipe({ recipe: newRecipe, file: selectedFile });
+      toast.success('레시피가 수정 되었습니다.');
     } else {
       createRecipe({ recipe: newRecipe, file: selectedFile, userId: user.id, nickname: user.nickname });
+      toast.success('레시피가 등록 되었습니다.');
     }
 
     setTitle('');

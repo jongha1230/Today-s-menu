@@ -64,8 +64,7 @@ class AuthAPI {
       if (usersError) {
         throw Error(usersError.message);
       }
-      console.log(user);
-      console.log(usersData);
+
       return {
         id: user.id,
         email: user.email,

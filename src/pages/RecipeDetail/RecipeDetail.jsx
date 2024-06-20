@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import defaultImage from '../../assets/images/default-food-image.png';
 import defaultProfileImage from '../../assets/images/memoticon.png';
 import {
@@ -23,8 +24,6 @@ function RecipeDetail() {
   const { mutate: deleteRecipe } = useDeleteRecipe();
   const navigate = useNavigate();
 
-  console.log(comments);
-
   const [content, setContent] = useState('');
 
   const [showCommentsForm, setShowCommentsForm] = useState(false);
@@ -36,6 +35,7 @@ function RecipeDetail() {
       setShowCommentsForm((state) => !state);
     } else {
       alert('로그인을 해주세요');
+      navigate('/login');
     }
   };
 
@@ -49,6 +49,7 @@ function RecipeDetail() {
     };
     createComment(newComment);
     setShowCommentsForm(false);
+    toast.success('댓글이 등록되었습니다.');
   };
 
   const handleUpdateComment = (comment) => {
@@ -56,7 +57,7 @@ function RecipeDetail() {
       setEditCommentId(comment.id);
       setEditCommentContent(comment.comment);
     } else {
-      alert('본인이 작성한 리뷰만 수정할 수 있습니다.');
+      toast.warn('본인이 작성한 댓글만 수정할 수 있습니다.');
     }
   };
 
@@ -66,15 +67,17 @@ function RecipeDetail() {
     updateComment({ commentId: comment.id, content: editCommentContent });
     setEditCommentId(null);
     setEditCommentContent('');
+    toast.success('댓글이 수정되었습니다.');
   };
 
   const handleDeleteComment = (commentId, commentUserId) => {
     if (commentUserId === user?.id) {
       if (confirm('삭제하시겠습니까?')) {
         deleteComment(commentId);
+        toast.success('댓글이 삭제되었습니다.');
       }
     } else {
-      alert('본인이 작성한 리뷰만 삭제할 수 있습니다.');
+      toast.warn('본인이 작성한 댓글만 삭제할 수 있습니다.');
     }
   };
 
@@ -86,6 +89,7 @@ function RecipeDetail() {
     if (confirm('정말로 삭제하시겠습니까?')) {
       deleteRecipe(recipeId);
       navigate('/', { replace: true });
+      toast.success('레시피가 삭제되었습니다.');
     }
   };
 
@@ -161,7 +165,7 @@ function RecipeDetail() {
               <div className="flex justify-end">
                 <button
                   type="submit"
-                  className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+                  className="bg-theme-color hover:bg-default-color text-black font-bold py-2 px-4 rounded"
                 >
                   제출
                 </button>
@@ -187,7 +191,7 @@ function RecipeDetail() {
                       </div>
                       <div className="flex-1">
                         <h3 className="font-bold" style={{ cursor: 'pointer' }}>
-                          {comment?.user.nickname}
+                          {comment?.users.nickname}
                         </h3>
                       </div>
                     </div>
