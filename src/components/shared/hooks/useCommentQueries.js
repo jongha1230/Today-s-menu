@@ -33,16 +33,15 @@ export const useUpdateComment = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async ({ commentId, content }) => {
-      console.log('ddd333', commentId, content);
       const data = await api.comment.editComment(commentId, content);
-      console.log('ddd', data);
+
       return data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries(['comments']);
     },
     onError: (error) => {
-      console.error('레시피 업데이트 도중 에러 발생:', error);
+      console.error('댓글 업데이트 도중 에러 발생:', error);
     }
   });
 };
@@ -57,7 +56,7 @@ export const useDeleteComment = () => {
     },
     onSuccess: () => queryClient.invalidateQueries(['comments']),
     onError: (error) => {
-      console.error('레시피 삭제 도중 에러 발생:', error);
+      console.error('댓글 삭제 도중 에러 발생:', error);
     }
   });
 };

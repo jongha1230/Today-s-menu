@@ -1,3 +1,4 @@
+import { toast } from 'react-toastify';
 import supabase from './supabaseAPI';
 
 class AuthAPI {
@@ -9,15 +10,14 @@ class AuthAPI {
         throw Error(signUpError.message);
       }
 
-      const { data: userData, error: userError } = await supabase.from('users').insert({ id: userId, nickname });
+      const { data: userData, error: userError } = await supabase.from('users').insert({ id: userId, nickname, email });
       if (userError) {
         throw Error(userError.message);
       }
 
-      console.log('회원가입 성공!');
-
       return { signUpData, userData };
     } catch (error) {
+      toast.error('회원가입 실패');
       throw new Error(`회원가입 실패 : ${error.message}`);
     }
   };
@@ -28,10 +28,10 @@ class AuthAPI {
       if (signInError) {
         throw Error(signInError.message);
       }
-      console.log('로그인 성공!');
       return signInData;
     } catch (error) {
-      throw new Error(`회원가입 실패 : ${error.message}`);
+      toast.error('로그인 실패');
+      throw new Error(`로그인 실패 : ${error.message}`);
     }
   };
 
@@ -41,9 +41,9 @@ class AuthAPI {
       if (signOutError) {
         throw Error(signOutError.message);
       }
-      console.log('로그아웃 성공!');
     } catch (error) {
-      throw new Error(`로그인 실패 : ${error.message}`);
+      toast.error('로그아웃 실패');
+      throw new Error(`로그아웃 실패 : ${error.message}`);
     }
   };
 
@@ -64,11 +64,10 @@ class AuthAPI {
       if (usersError) {
         throw Error(usersError.message);
       }
-      console.log(user);
-      console.log(usersData);
+
       return {
         id: user.id,
-        email: usersData.email,
+        email: user.email,
         nickname: usersData.nickname,
         profile_picture_url: usersData.profile_picture_url
       };

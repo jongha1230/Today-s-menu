@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import api from '../../api/api';
 import AuthButton from './AuthButton';
 import AuthInput from './AuthInput';
@@ -17,35 +18,34 @@ const SignUpForm = () => {
     event.preventDefault();
 
     if (!values.nickname.trim()) {
-      alert('닉네임을 입력해주세요 !');
+      toast.error('닉네임을 입력해주세요 !');
       return;
     }
     if (!values.email.trim()) {
-      alert('이메일을 입력해주세요 !');
+      toast.error('이메일을 입력해주세요 !');
       return;
     }
     if (!values.password.trim()) {
-      alert('비밀번호를 입력해주세요 !');
+      toast.error('비밀번호을 입력해주세요 !');
       return;
     }
     if (values.password.length < 6) {
-      alert('비밀번호는 6자 이상 입력해주세요.');
+      toast.error('비밀번호는 6자 이상 입력해주세요.');
       return;
     }
     if (!confirmPw) {
-      alert('비밀번호를 확인해주세요.');
+      toast.error('비밀번호를 확인해주세요.');
       return;
     }
     if (values.password !== confirmPw) {
-      alert('비밀번호가 다릅니다.');
+      toast.error('비밀번호가 다릅니다.');
       return;
     }
 
     api.auth.SignUp(values);
     setValues({ email: '', password: '', nickname: '' });
     setConfirmPw('');
-
-    alert('회원가입 되었습니다.');
+    toast.success('회원가입 되었습니다.');
     navigate('/login');
   };
 
@@ -81,7 +81,7 @@ const SignUpForm = () => {
           type="password"
           placeholder="비밀번호를 다시 한번 더 입력해주세요."
           name="confirmPw"
-          value={values.nickname}
+          value={confirmPw}
           handler={(e) => {
             setConfirmPw(e.target.value);
           }}

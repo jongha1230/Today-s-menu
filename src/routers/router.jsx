@@ -21,10 +21,13 @@ const router = createBrowserRouter([
         element: <MainPage />
       },
       {
+        path: '/recipe',
+        element: <CommitRecipePage />
+      },
+      {
         path: '/recipe/:recipeId',
         element: <RecipeDetail />
       },
-      { path: '/recipe', element: <CommitRecipePage /> },
       {
         path: '/recipe/:recipeId/edit',
         element: <CommitRecipePage />

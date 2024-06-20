@@ -1,29 +1,25 @@
-import React from 'react';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import RecipeForm from '../../components/recipe/RecipeForm';
-import { useCreateRecipe, useRecipeDetail } from '../../components/shared/hooks/useRecipeQueries';
+import { useRecipeDetail } from '../../components/shared/hooks/useRecipeQueries';
+import useUserStore from '../../store/useUserStore';
 
 const CommitRecipePage = () => {
   const { recipeId } = useParams();
-  const location = useLocation();
+  const { user } = useUserStore();
   const navigate = useNavigate();
-  const { data: existingRecipe } = useRecipeDetail(recipeId);
-  const { mutate: createRecipe } = useCreateRecipe();
-
-  // 레시피 제출후 메인페이지로 이동
-  const handleSubmitRecipe = (newRecipe) => {
-    createRecipe(newRecipe);
-    if (location.state?.from === '/recipe/:recipeId') {
-      navigate(`/recipe/${newRecipe.id}`, { replace: true });
-    } else {
-      navigate('/', { replace: true });
+  useEffect(() => {
+    if (!user) {
+      navigate('/');
     }
-  };
+  }, [user, navigate]);
+
+  const { data: existingRecipe } = useRecipeDetail(recipeId);
 
   return (
     <div className="flex justify-center items-center min-h-screen">
-      <RecipeForm existingRecipe={existingRecipe} onSubmitRecipe={handleSubmitRecipe} />
+      <RecipeForm existingRecipe={existingRecipe} />
     </div>
   );
 };
