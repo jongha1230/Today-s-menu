@@ -1,5 +1,5 @@
 import SearchIcon from '@mui/icons-material/Search';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { LuPointer } from 'react-icons/lu';
 import { Link } from 'react-router-dom';
 
@@ -7,38 +7,18 @@ import MainImage from '../../assets/images/MainImage.jpg';
 
 import RecipeList from '../../components/common/RecipeList/RecipeList';
 import SurveyModal from '../../components/modals/SurveyModal';
-import { useGetRecipes } from '../../components/shared/hooks/useRecipeQueries';
-import { getCurrentTimeOfDay } from '../../components/shared/utils/getCurrentTimeOfDay';
-import useMainStore from '../../store/useMainStore';
+import { useRecipes } from '../../components/shared/hooks/useRecipes';
+import { useTimeOfDay } from '../../components/shared/hooks/useTimeOfDay';
 
 const MainPage = () => {
-  const { data: recipes, error } = useGetRecipes();
-  const { filteredRecipes, searchTerm, setSearchTerm } = useMainStore();
+  const [searchTerm, setSearchTerm] = useState('');
+  const filteredRecipes = useRecipes(searchTerm);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [time, setTime] = useState('');
-
-  useEffect(() => {
-    if (recipes) {
-      // 전체 레시피 목록을 전역 상태에 저장
-      useMainStore.getState().setRecipes(recipes);
-    }
-
-    // 시간대 설정 함수 호출
-    const timeOfDay = getCurrentTimeOfDay();
-    setTime(timeOfDay);
-  }, [recipes]);
-
-  const handleSearch = useCallback(() => {
-    setSearchTerm(searchTerm); // onSearch 속성 제거, setSearchTerm으로 직접 검색어 상태 업데이트
-  }, [searchTerm, setSearchTerm]);
+  const time = useTimeOfDay();
 
   const handleModalToggle = () => {
     setIsModalOpen(!isModalOpen);
   };
-
-  useEffect(() => {
-    window.scrollTo(0, 0); // 검색 시 스크롤 위치를 상단으로 이동, 화면 흔들림 방지
-  }, [searchTerm]);
 
   return (
     <div>
@@ -71,8 +51,9 @@ const MainPage = () => {
             className="outline-none w-40 sm:w-64 text-sm"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
+            aria-label="검색어 입력"
           />
-          <button className="outline-none" onClick={handleSearch}>
+          <button className="outline-none" aria-label="검색">
             <SearchIcon />
           </button>
         </div>

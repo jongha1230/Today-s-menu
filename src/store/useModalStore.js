@@ -2,7 +2,7 @@ import { create } from 'zustand';
 
 const useModalStore = create((set) => ({
   currentPage: 0,
-  totalPages: 7,
+  totalPages: 8,
   nextPage: () =>
     set((state) => ({
       currentPage: state.currentPage + 1 < state.totalPages ? state.currentPage + 1 : state.currentPage
