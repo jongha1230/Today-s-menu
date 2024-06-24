@@ -10,6 +10,7 @@ import MainPage from '../pages/MainPage';
 import MyPage from '../pages/MyPage/MyPage';
 import RecipeDetail from '../pages/RecipeDetail';
 import MainLayout from '../styles/MainLayout/MainLayout';
+import { requireAuthLoader } from './requireAuthLoader';
 
 const router = createBrowserRouter([
   {
@@ -22,7 +23,8 @@ const router = createBrowserRouter([
       },
       {
         path: '/recipe',
-        element: <CommitRecipePage />
+        element: <CommitRecipePage />,
+        loader: requireAuthLoader
       },
       {
         path: '/recipe/:recipeId',
@@ -30,11 +32,13 @@ const router = createBrowserRouter([
       },
       {
         path: '/recipe/:recipeId/edit',
-        element: <CommitRecipePage />
+        element: <CommitRecipePage />,
+        loader: requireAuthLoader
       },
       {
         path: '/',
         element: <MyPage />,
+        loader: requireAuthLoader,
         children: [
           { path: '/myPage', element: <MyPageForm /> },
           { path: '/modify', element: <MyPageModify /> }

@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { IoIosMail } from 'react-icons/io';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import defaultProfileImage from '../../assets/images/memoticon.png';
 import useUserStore from '../../store/useUserStore';
 import RecipeList from '../common/RecipeList/RecipeList';
@@ -8,23 +8,11 @@ import { useGetMyRecipes } from '../shared/hooks/useRecipeQueries';
 
 const MyPageForm = () => {
   const { user } = useUserStore();
-  const navigate = useNavigate();
   const { data: myRecipes, isLoading } = useGetMyRecipes(user?.id);
-
-  useEffect(() => {
-    if (!user) {
-      navigate('/');
-    }
-  }, [user, navigate]);
 
   // 로딩 중일 때 처리
   if (isLoading) {
     return <div>Loading...</div>;
-  }
-
-  // user가 없거나 myRecipes가 undefined일 때 처리
-  if (!user || !myRecipes) {
-    return null; // 또는 리디렉션이 되기 전까지 빈 화면 유지
   }
 
   return (

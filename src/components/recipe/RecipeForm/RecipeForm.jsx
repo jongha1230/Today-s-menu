@@ -12,9 +12,6 @@ const RecipeForm = ({ existingRecipe }) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [initialTitle, setInitialTitle] = useState('');
-  const [initialContent, setInitialContent] = useState('');
-  const [initialImageSrc, setInitialImageSrc] = useState('https://via.placeholder.com/200');
   const navigate = useNavigate();
   const { user } = useUserStore();
 
@@ -23,9 +20,6 @@ const RecipeForm = ({ existingRecipe }) => {
 
   useEffect(() => {
     if (existingRecipe) {
-      setInitialTitle(existingRecipe.title);
-      setInitialContent(existingRecipe.content);
-      setInitialImageSrc(existingRecipe.thumbnail || 'https://via.placeholder.com/200');
       setTitle(existingRecipe.title);
       setContent(existingRecipe.content);
       setImageSrc(existingRecipe?.thumbnail || 'https://via.placeholder.com/200');
@@ -78,9 +72,11 @@ const RecipeForm = ({ existingRecipe }) => {
   };
 
   const handleCancelEdit = () => {
-    setTitle(initialTitle);
-    setContent(initialContent);
-    setImageSrc(initialImageSrc);
+    if (existingRecipe) {
+      setTitle(existingRecipe.title);
+      setContent(existingRecipe.content);
+      setImageSrc(existingRecipe.thumbnail || 'https://via.placeholder.com/200');
+    }
     setSelectedFile(null);
     navigate(-1);
   };
