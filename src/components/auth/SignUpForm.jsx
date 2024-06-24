@@ -14,7 +14,7 @@ const SignUpForm = () => {
     setValues({ ...values, [name]: value });
   };
 
-  const onSubmitHandler = (event) => {
+  const onSubmitHandler = async (event) => {
     event.preventDefault();
 
     if (!values.nickname.trim()) {
@@ -42,11 +42,15 @@ const SignUpForm = () => {
       return;
     }
 
-    api.auth.SignUp(values);
-    setValues({ email: '', password: '', nickname: '' });
-    setConfirmPw('');
-    toast.success('회원가입 되었습니다.');
-    navigate('/login');
+    try {
+      await api.auth.SignUp(values);
+      setValues({ email: '', password: '', nickname: '' });
+      setConfirmPw('');
+      toast.success('회원가입 되었습니다.');
+      navigate('/login');
+    } catch (error) {
+      throw new Error(`회원가입 실패 : ${error.message}`);
+    }
   };
 
   return (

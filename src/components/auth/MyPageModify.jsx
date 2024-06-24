@@ -42,13 +42,23 @@ const MyPageModify = () => {
     }
   };
 
-  const onSubmitHandler = (event) => {
+  const onSubmitHandler = async (event) => {
     event.preventDefault();
 
-    api.auth.UpdateUser(values);
-    setUser(values);
-    navigate('/myPage');
-    toast.success('프로필이 수정되었습니다.');
+    if (!values.nickname.trim()) {
+      toast.error('닉네임을 입력해주세요.');
+      return;
+    }
+
+    try {
+      const response = await api.auth.UpdateUser(values);
+      console.log(response);
+      setUser(values);
+      navigate('/myPage');
+      toast.success('프로필이 수정되었습니다.');
+    } catch (error) {
+      throw new Error(`프로필 수정 실패 : ${error.message}`);
+    }
   };
 
   return (
